@@ -28,7 +28,13 @@ MANIFEST
 
 
 # vs code
-*/.vscode/
+.vscode/
+
+# config file and deployment
+*.yml
+*.yaml
+settings.py
+
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
