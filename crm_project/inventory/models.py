@@ -1,6 +1,6 @@
-from typing import Tuple
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from . import fields
 
 
 class Product(models.Model):
@@ -15,17 +15,16 @@ class Product(models.Model):
     
     image_catalog = models.ImageField(
         verbose_name=_('عکس کاتالوگ'), 
-        upload_to="media/catalog/pictures",
+        upload_to="media/catalogs/pictures",
         blank=True)
 
-    pdf_catalog = models.FileField(
+    pdf_catalog = fields.PdfField(
         verbose_name=_('پی دی اف کاتالوگ'),
-        upload_to='media/catalog/pdfs',
+        upload_to='media/catalogs/pdfs',
         blank=True)
 
-    price = models.FloatField(
-        verbose_name=_('قیمت'), 
-        default=0.0)
+    price = models.PositiveIntegerField(
+        verbose_name=_('قیمت'))
 
     technical_features = models.TextField(
         verbose_name=_('ویژگی های فنی'), 

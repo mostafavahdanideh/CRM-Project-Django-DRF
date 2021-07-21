@@ -34,7 +34,8 @@ MANIFEST
 *.yml
 *.yaml
 settings.py
-
+media/
+asset/
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
