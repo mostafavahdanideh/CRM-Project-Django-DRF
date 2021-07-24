@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class="flex-row">
+        <form method='post'>
+            {% csrf_token %}
+            <div class='ms-5 mt-lg-5'>
+                <h3 class='text-white mb-3'>{% trans "فرم ورود" %}</h3>
+
+                <label for="username"></label>
+                <div class="input-group mb-3" style='padding-right: 75%;'>
+                    <span class="input-group-text">
+                        <img src="https://img.icons8.com/doodle/30/000000/user.png"/>
+                    </span>
+                    <input id='username' name='username' value='' type="text" class="form-control" placeholder={% trans "نام کاربری" %}>
+                </div>
+
+                <label for="password" class="visually-hidden"></label>
+                <div class="input-group mb-3" style='padding-right: 75%;'>
+                    <span class="input-group-text">
+                        <img src="https://img.icons8.com/color/30/000000/forgot-password.png"/>
+                    </span>
+                    <input id="password" type="password" name='password' value='' class="form-control" placeholder={% trans "رمزعبور" %}>
+                </div>
+            </div>
+            <div class='ms-5'>
+                <button type='submit' class='btn btn-primary'>{% trans "تایید" %}</button>
+            </div>
+        </form>
+    </div>
+{% endblock content %}

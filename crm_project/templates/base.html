@@ -1,0 +1,60 @@
+{% load static %}
+{% load i18n %}
+
+
+<html dir='ltr' lang='en'>
+
+<head>
+    <title>
+        {% block title %}{% trans "خونه" %}{% endblock title %}
+    </title>
+
+    <link href={% static 'bootstrap/bootstrap.css' %} rel='stylesheet'></link>
+    <link href={% static 'bootstrap/bootstrap.min.css' %} rel='stylesheet'></link>
+</head>
+
+<body background={% static 'image/crm-for-dummies-guide.jpg' %}>
+    <div class='container-fluid' style="padding-left: unset; padding-right: unset">
+        <div class='sticky-top'>
+            <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+                <div class="container-fluid">
+                    <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav">
+                        
+                            {% if request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
+                                </li>
+                            {% endif %}
+
+                            {% if request.user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
+                                </li>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+
+        <div class='mt-3'>
+            {% block content %}{% endblock content %}
+        </div>
+    </div>
+    
+
+<script src={% static 'bootstrap/bootstrap.bundle.min.js' %}></script>
+<script src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+
+</body>
+
+</html>

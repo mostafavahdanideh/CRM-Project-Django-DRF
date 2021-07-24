@@ -4,8 +4,13 @@ from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
 
 
+
+# phone regex -> ^0[0-9]{2,}[0-9]{7,}$
+
+
+
 phone_regex = RegexValidator(
-    regex='^0[0-9]{2,}[0-9]{7,}$', 
+    regex='^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$', 
     message='phone number is invalid')
 
 
@@ -34,7 +39,7 @@ class Organization(models.Model):
         validators=[phone_regex], 
         max_length=11)
 
-    workers_number = models.PositiveIntegerField(
+    workers_size = models.PositiveIntegerField(
         verbose_name=_('تعداد کارگران'), 
         default=1)
 
@@ -42,26 +47,27 @@ class Organization(models.Model):
         'OrganizationProduct', 
         verbose_name=_('محصولات تولیدی'))
 
-    expert_full_name = models.CharField(
+    client_full_name = models.CharField(
         verbose_name=_("نام خانوادگی مخاطب"),
         max_length=50)
 
-    expert_phone_number = models.CharField(
+    client_phone_number = models.CharField(
         verbose_name=_('شماره تلفن مخاطب'), 
         validators=[phone_regex], 
         max_length=11)
 
-    expert_email = models.EmailField(
-        verbose_name=_('ایمیل'))
+    client_email = models.EmailField(
+        verbose_name=_('ایمیل مخاطب'),
+        blank=True)
 
     created_time = models.DateTimeField(
         verbose_name=_('تاریخ ایجاد شده'), 
         auto_now_add=True)
 
-    creator = models.ForeignKey(
+    expert_creator = models.ForeignKey(
         get_user_model(), 
         verbose_name=_('ایحاد کننده'), 
-        on_delete=models.PROTECT)
+        on_delete=models.CASCADE)
 
     def __str__(self):
         return self.organization_name

@@ -3,13 +3,13 @@ from django.utils.translation import ugettext_lazy as _
 from . import fields
 
 
-class Product(models.Model):
+class CompanyProduct(models.Model):
 
     name = models.CharField(
         verbose_name=_('نام محصول'),
         max_length=50)
     
-    is_taxation = models.BooleanField(
+    has_taxation = models.BooleanField(
         verbose_name=_('آیا مشمول مالیات است؟'), 
         default=True)
     
