@@ -18,58 +18,60 @@
 
 <body background={% static 'image/crm-for-dummies-guide.jpg' %}>
     <div class='container-fluid' style="padding-left: unset; padding-right: unset">
-        <div class='sticky-top'>
-            <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-                <div class="container-fluid">
+        <div class='row'>
+            <div class='sticky-top'>
+                <nav class="navbar navbar-expand-lg navbar-light bg-dark">
+                    <div class="container-fluid">
 
-                    <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
+                        <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
 
-                    {% if request.user.is_authenticated %}
-                        <a class="navbar-brand text-white" href="#">{{request.user}}</a>
-                    {% endif %}
+                        {% if request.user.is_authenticated %}
+                            <a class="navbar-brand text-white" href="#">{{request.user}}</a>
+                        {% endif %}
 
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
-                        
-                            {% if request.user.is_superuser %}
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
-                                </li>
-                            {% endif %}
+                        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                            <ul class="navbar-nav">
+                            
+                                {% if request.user.is_superuser %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
+                                    </li>
+                                {% endif %}
 
-                            {% if request.user.is_authenticated %}
+                                {% if request.user.is_authenticated %}
 
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
+                                    </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
+                                    </li>
 
-                                 <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
-                                </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
+                                    </li>
 
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
-                                </li>
-                            {% endif %}
-                        </ul>
+                                {% else %}
+                                    <li class="nav-item">
+                                        <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
+                                    </li>
+                                {% endif %}
+                            </ul>
+                        </div>
                     </div>
-                </div>
-            </nav>
+                </nav>
+            </div>
         </div>
-
-        <div class='mt-3'>
+        <div class='row'>
             {% block content %}{% endblock content %}
+            {% block show_messages %}{% endblock show_messages %}
         </div>
     </div>
     
-
-<script src={% static 'bootstrap/bootstrap.bundle.min.js' %}></script>
-<script src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+    <script src={% static 'bootstrap/bootstrap.bundle.min.js' %}></script>
+    <script src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+    {% block scripts %}{% endblock scripts %}
 
 </body>
 
