@@ -4,11 +4,6 @@ from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
 
 
-
-# phone regex -> ^0[0-9]{2,}[0-9]{7,}$
-
-
-
 phone_regex = RegexValidator(
     regex='^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$', 
     message='phone number is invalid')
@@ -47,17 +42,17 @@ class Organization(models.Model):
         'OrganizationProduct', 
         verbose_name=_('محصولات تولیدی'))
 
-    client_full_name = models.CharField(
-        verbose_name=_("نام خانوادگی مخاطب"),
+    owner_full_name = models.CharField(
+        verbose_name=_("نام و نام خانوادگی کارفرما"),
         max_length=50)
 
-    client_phone_number = models.CharField(
-        verbose_name=_('شماره تلفن مخاطب'), 
+    owner_phone_number = models.CharField(
+        verbose_name=_('شماره تلفن کارفرما'), 
         validators=[phone_regex], 
         max_length=11)
 
-    client_email = models.EmailField(
-        verbose_name=_('ایمیل مخاطب'),
+    owner_email = models.EmailField(
+        verbose_name=_('ایمیل کارفرما'),
         blank=True)
 
     created_time = models.DateTimeField(
@@ -66,8 +61,8 @@ class Organization(models.Model):
 
     expert_creator = models.ForeignKey(
         get_user_model(), 
-        verbose_name=_('ایحاد کننده'), 
-        on_delete=models.CASCADE)
+        verbose_name=_('کارشناس ایجاد کننده'), 
+        on_delete=models.PROTECT)
 
     def __str__(self):
         return self.organization_name

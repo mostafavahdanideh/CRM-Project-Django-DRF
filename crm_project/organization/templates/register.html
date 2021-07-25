@@ -1,5 +1,93 @@
 {% extends 'base.html' %}
+{% load i18n %}
+
+{% block style %}
+    input:placeholder-shown {
+        border-color: teal;
+        padding-right: 10px;
+    }
+{% endblock style %}
 
 {% block content %}
-    <p class='fs-4 text-center text-white'>{{retult}}</p>
+    <div class='row'>
+        <div class="col-4">
+            <div class='mt-lg-5 ms-lg-5'>
+                {% if form.errors %}
+                    {% for field in form %}
+                        {% for error in field.errors %}
+                            <div class="alert alert-danger">
+                                <strong>{{ field.name }}:<br>{{ error|escape }}</strong>
+                            </div>
+                        {% endfor %}
+                    {% endfor %}
+                    {% for error in form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            <strong>{{ error|escape }}</strong>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-8">
+            <div style="margin-left: 35%; margin-right: 20%; margin-top: 5%;">
+                <form method='post'>
+                    {% csrf_token %}
+
+                    <div class="mb-3 text-white">
+                        <h2>{% trans "سازمان خود را تعریف کنید" %}</h2>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="province_name" class="form-label"></label>
+                        <input id='province_name' name='province_name' value='' class="form-control" style="text-align: right; text-indent: 10px;" type="text" placeholder='{% trans "نام استان" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="organization_name" class="form-label"></label>
+                        <input id='organization_name' name='organization_name' value='' style="text-align: right;" type="text" class="form-control" placeholder='{% trans "نام سازمان" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="organization_phone_number" class="form-label"></label>
+                        <input id='organization_phone_number' name='organization_phone_number' value='' style="text-align: right;" type="text" class="form-control" maxlength="11" placeholder='{% trans "شماره تلفن سازمان" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="owner_full_name" class="form-label"></label>
+                        <input id='owner_full_name' name='owner_full_name' value='' style="text-align: right;" type="text" class="form-control" placeholder='{% trans "نام و نام خانوادگی کارفرما" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="owner_phone_number" class="form-label"></label>
+                        <input id='owner_phone_number' name='owner_phone_number' value='' style="text-align: right;" type="text" class="form-control" placeholder='{% trans "شماره تلفن کارفرما" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="owner_email" class="form-label"></label>
+                        <input id='owner_email' name='owner_email' style="text-align: right;" type="email" class="form-control" placeholder='{% trans "ایمیل کارفرما" %}'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="workers_size" class="form-label"></label>
+                        <input id='workers_size' name='workers_size' value='' style="text-align: left;" type="number" class="form-control" placeholder='{% trans "تعداد کارگران" %}' min='1'>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="manufacturedـproducts" class="form-label"></label>
+                        <select id='manufacturedـproducts' name='manufacturedـproducts' style="text-align: right;" class="form-select" multiple>
+                            {% for item in form.manufacturedـproducts %}
+                                <option value={{forloop.counter}}>{{item}}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div style="text-align: right;">
+                        <button type='submit' class='btn btn-primary'>{% trans "ثبت" %}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    
 {% endblock content %}

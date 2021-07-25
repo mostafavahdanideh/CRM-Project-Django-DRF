@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class='text-white ms-lg-5 mx-lg-5 mt-lg-5'>
+        <table class="table table-dark">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans "نام استان" %}</th>
+                    <th>{% trans "نام سازمان" %}</th>
+                    <th>{% trans "شماره تلفن سازمان" %}</th>
+                    <th>{% trans "نام و نام خانوادگی کارفرما" %}</th>
+                    <th>{% trans "شماره تلفن کارفرما" %}</th>
+                    <th>{% trans "ایمیل کارفرما" %}</th>
+                    <th>{% trans "تعداد کارگران" %}</th>
+                    <th>{% trans "کابر ثبت کننده" %}</th>
+                    <th>{% trans "تاریخ ثبت شده" %}</th>
+                </tr>
+            <thead>
+            <tbody>
+                {% for item in object_list %}
+                    <tr>
+                        <td>{{forloop.counter}}</td>
+                        <td>{{item.province_name}}</td>
+                        <td>{{item.organization_name}}</td>
+                        <td>{{item.organization_phone_number}}</td>
+                        <td>{{item.owner_full_name}}</td>
+                        <td>{{item.owner_phone_number}}</td>
+                        <td>{{item.owner_email}}</td>
+                        <td>{{item.workers_size}}</td>
+                        <td>{{item.expert_creator}}</td>
+                        <td>{{item.created_time}}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}

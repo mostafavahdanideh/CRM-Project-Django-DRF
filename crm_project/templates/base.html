@@ -11,6 +11,9 @@
 
     <link href={% static 'bootstrap/bootstrap.css' %} rel='stylesheet'></link>
     <link href={% static 'bootstrap/bootstrap.min.css' %} rel='stylesheet'></link>
+    <style>
+        {% block style %}{% endblock style %}
+    </style>
 </head>
 
 <body background={% static 'image/crm-for-dummies-guide.jpg' %}>
@@ -18,7 +21,13 @@
         <div class='sticky-top'>
             <nav class="navbar navbar-expand-lg navbar-light bg-dark">
                 <div class="container-fluid">
+
                     <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
+
+                    {% if request.user.is_authenticated %}
+                        <a class="navbar-brand text-white" href="#">{{request.user}}</a>
+                    {% endif %}
+
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
                         <ul class="navbar-nav">
                         
@@ -29,12 +38,19 @@
                             {% endif %}
 
                             {% if request.user.is_authenticated %}
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
-                                </li>
+
                                 <li class="nav-item">
                                     <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
                                 </li>
+
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
+                                </li>
+
+                                 <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
+                                </li>
+
                             {% else %}
                                 <li class="nav-item">
                                     <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>

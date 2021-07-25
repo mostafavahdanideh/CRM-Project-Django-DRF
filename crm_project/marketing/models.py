@@ -4,7 +4,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Quote(models.Model):
 
-    client = models.ForeignKey(
+    owner = models.ForeignKey(
         "organization.Organization",
         on_delete=models.PROTECT,
         verbose_name=_("سازمان"))
@@ -14,13 +14,12 @@ class Quote(models.Model):
         verbose_name=_("تاریخ ایجاد پیش فاکتور"))
 
     def __str__(self):
-        return self.client.organization_name
+        return self.owner.organization_name
     
-	
 
 class QuoteItem(models.Model):
 
-	Quote = models.ForeignKey(
+	quote = models.ForeignKey(
         "Quote",
         on_delete=models.CASCADE)
 
@@ -29,7 +28,7 @@ class QuoteItem(models.Model):
         on_delete=models.PROTECT
     )
 
-	qty = models.PositiveIntegerField(
+	quantity = models.PositiveIntegerField(
         default=1,
         verbose_name=_("تعداد خرید")
     )

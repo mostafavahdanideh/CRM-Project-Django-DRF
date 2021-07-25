@@ -20,9 +20,9 @@ class OrganizationAdmin(admin.ModelAdmin):
         'organization_name',
         'organization_phone_number',
         'workers_size',
-        'client_full_name',
-        'client_phone_number',
-        'client_email',
+        'owner_full_name',
+        'owner_phone_number',
+        'owner_email',
         'created_time',
         'expert_creator',
 
@@ -31,15 +31,15 @@ class OrganizationAdmin(admin.ModelAdmin):
     search_fields = (
         'province_name',
         'organization_name',
-        'client_full_name',
+        'owner_full_name',
         'expert_creator__username',
     )
 
     list_editable = [
-        'client_email',
+        'owner_email',
         'expert_creator',
         'organization_phone_number',
-        'client_full_name',
+        'owner_full_name',
     ]
 
     list_filter = (
