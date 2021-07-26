@@ -17,60 +17,88 @@
 </head>
 
 <body background={% static 'image/crm-for-dummies-guide.jpg' %}>
-    <div class='container-fluid' style="padding-left: unset; padding-right: unset">
+    <div class='container-lg'>
         <div class='row'>
-            <div class='sticky-top'>
+            <div class='sticky-top mt-lg-5'>
                 <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-                    <div class="container-fluid">
+                    <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
 
-                        <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
+                    {% if request.user.is_authenticated %}
+                        <a class="navbar-brand text-white" href="#">{{request.user}}</a>
+                    {% endif %}
 
-                        {% if request.user.is_authenticated %}
-                            <a class="navbar-brand text-white" href="#">{{request.user}}</a>
-                        {% endif %}
+                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                        <ul class="navbar-nav">
+                        
+                            {% if request.user.is_superuser %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
+                                </li>
+                            {% endif %}
 
-                        <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                            <ul class="navbar-nav">
-                            
-                                {% if request.user.is_superuser %}
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
-                                    </li>
-                                {% endif %}
+                            {% if request.user.is_authenticated %}
 
-                                {% if request.user.is_authenticated %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
+                                </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
+                                </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
-                                    </li>
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
+                                </li>
 
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
-                                    </li>
-
-                                {% else %}
-                                    <li class="nav-item">
-                                        <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
-                                    </li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                            {% else %}
+                                <li class="nav-item">
+                                    <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
+                                </li>
+                            {% endif %}
+                        </ul>
                     </div>
                 </nav>
             </div>
         </div>
         <div class='row'>
-            {% block content %}{% endblock content %}
-            {% block show_messages %}{% endblock show_messages %}
+            <div>
+                {% block content %}{% endblock content %}
+            </div>
+        </div>
+        <div class='row'>
+            <div>
+                {% block show_messages %}
+                    {% if request.method == 'POST' %}
+                        <div class="alert alert-danger d-flex align-items-center mt-lg-5 mx-lg-5" role="alert">
+                            <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                                <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                                </symbol>
+                            </svg>
+                            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                            <div>
+                                {% if messages %}
+                                    {% for message in messages %}
+                                        <strong>{{message}}</strong>
+                                    {% endfor %}
+                                {% endif %}
+                            </div>
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endif %}
+                {% endblock show_messages %}
+            </div>
         </div>
     </div>
     
     <script src={% static 'bootstrap/bootstrap.bundle.min.js' %}></script>
     <script src="{% static 'jquery/jquery-3.6.0.min.js' %}"></script>
+    <script>
+        // to prevent a resubmit form and send POST method again on refresh page
+        if ( window.history.replaceState ) {
+            window.history.replaceState( null, null, window.location.href );
+        }
+    </script>
     {% block scripts %}{% endblock scripts %}
 
 </body>

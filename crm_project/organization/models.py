@@ -2,10 +2,11 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import RegexValidator
 from django.contrib.auth import get_user_model
+from django_jalali.db import models as jmodels
 
 
 phone_regex = RegexValidator(
-    regex='^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$', 
+    regex='^((?:\+98|0)(\d){2}(\d){8})$', 
     message='phone number is invalid')
 
 
@@ -32,7 +33,8 @@ class Organization(models.Model):
     organization_phone_number = models.CharField(
         verbose_name=_('شماره تلفن سازمان'), 
         validators=[phone_regex], 
-        max_length=11)
+        max_length=11,
+        unique=True)
 
     workers_size = models.PositiveIntegerField(
         verbose_name=_('تعداد کارگران'), 
@@ -49,13 +51,14 @@ class Organization(models.Model):
     owner_phone_number = models.CharField(
         verbose_name=_('شماره تلفن کارفرما'), 
         validators=[phone_regex], 
-        max_length=11)
+        max_length=11,
+        unique=True)
 
     owner_email = models.EmailField(
         verbose_name=_('ایمیل کارفرما'),
         blank=True)
 
-    created_time = models.DateTimeField(
+    created_time = jmodels.jDateTimeField(
         verbose_name=_('تاریخ ایجاد شده'), 
         auto_now_add=True)
 

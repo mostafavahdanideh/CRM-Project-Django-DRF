@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django_jalali.db import models as jmodels
 
 
 class Quote(models.Model):
@@ -9,7 +10,7 @@ class Quote(models.Model):
         on_delete=models.PROTECT,
         verbose_name=_("سازمان"))
 
-    created_time = models.DateTimeField(
+    created_time = jmodels.jDateTimeField(
         auto_now_add=True,
         verbose_name=_("تاریخ ایجاد پیش فاکتور"))
 
