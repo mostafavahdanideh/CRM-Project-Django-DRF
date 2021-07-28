@@ -29,3 +29,8 @@ class QuoteAdminManagement(admin.ModelAdmin):
     @admin.display(description='format datatime')
     def created_on(self, obj):
         return obj.created_time.strftime("%Y/%m/%d  ,  %H:%M:%S")
+
+
+@admin.register(models.FollowUp)
+class FollowUpAdmin(admin.ModelAdmin):
+    pass

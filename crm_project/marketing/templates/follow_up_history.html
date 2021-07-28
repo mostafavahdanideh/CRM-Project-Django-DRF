@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class='row'>
+        <div class='row'>
+            <div class='text-dark mt-lg-5 fw-bold fs-5'>
+                <h2>{% trans "تاریخچه پیگیری" %}</h2>
+            </div>
+        </div>
+
+        <div class='row text-white'>
+            <table class='table table-dark'>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>{% trans "کاربر" %}</th>
+                        <th>{% trans "تاریخ" %}</th>
+                        <th>{% trans "سفارش" %}</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for item in object_list  %}
+                        <tr>
+                            <td>{{forloop.counter}}</td>
+                            <td>{{item.expert_creator}}</td>
+                            <td>{{item.created_time}}</td>
+                            <td>{{item.content}}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include 'pagination.html' %}
+    </div>
+{% endblock content %}
