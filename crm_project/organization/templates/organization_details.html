@@ -1,6 +1,148 @@
 {% extends 'base.html' %}
+{% load i18n %}
 
 
 {% block content %}
-    <p class='text-white'>{{object.organization_name}}</p>
+
+    <div class='row'>
+        <div class='row'>
+            <div class='text-dark mt-lg-5 fw-bold fs-5'>
+                <h2>{{object.organization_name}} {% trans "مشخصات سازمان" %}: {% trans "شرکت" %}</h2>
+            </div>
+        </div>
+
+        <div style="display: inline;">
+            <a class="btn btn-secondary" href="{% url 'organization:list' %}" role="button" style="width: 12%;">{% trans "بازگشت" %}</a>
+            <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "صدور پیش فاکتور" %}</a>
+            <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "ویرایش اطلاعات مخاطب" %}</a>
+            <a class="btn btn-secondary" href="{% url 'marketing:follow_up_history' object.pk %}" role="button" style="width: 20%;">{% trans "تاریخچه پیگیری سفارشات سازمان" %}</a>
+        </div>
+    </div>
+
+    <div class='row'>
+        <div class='border border-white mt-lg-5 fs-5 fw-bold text-dark'>
+            <form method='post'>
+                {% csrf_token %}
+                <div class='row'>
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='province'>{% trans "نام استان" %}</label>
+                            <input class='form-control' id='province' name='province' value="{{object.province}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='organization_phone_number'>{% trans "تلفن" %}</label>
+                            <input class='form-control' id='organization_phone_number' name='organization_phone_number' value="{{object.organization_phone_number}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='created_time'>{% trans "تاریخ ثبت" %}</label>
+                            <input class='form-control' id='created_time' name='created_time' value="{{object.created_time|date:"Y-m-d , H:i:s" }}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='worker_size'>{% trans "تعداد کارگران" %}</label>
+                            <input class='form-control' id='worker_size' name='workers_size' value="{{object.workers_size}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='creator'>{% trans "ثبت توسط" %}</label>
+                            <input class='form-control' id='creator' name='expert_creator' value="{{object.expert_creator}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='phone_number'>{% trans "شماره تلفن مخاطب" %}</label>
+                            <input class='form-control' id='phone_number' name='owner_phone_number' value="{{object.owner_phone_number}}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='owner_first_name'>{% trans "نام مخاطب" %}</label>
+                            <input class='form-control' id='owner_first_name' name='owner_first_name' value="{{object.owner_first_name}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='owner_last_name'>{% trans "نام خانوادگی مخاطب" %}</label>
+                            <input class='form-control' id='owner_last_name' name='owner_last_name' value="{{object.owner_last_name}}" disabled>
+                        </div>
+                    </div>
+
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='owner_second_last_name'>{% trans "نام پسوندی مخاطب" %}</label>
+                            <input class='form-control' id='owner_second_last_name' name='owner_second_last_name' value="{{object.owner_second_last_name}}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='col-4'>
+                        <div class='pt-lg-3'>
+                            <label class="form-label" for='owner_email'>{% trans "ایمیل مخاطب" %}</label>
+                            <input class='form-control' id='owner_email' name='owner_email' value="{{object.owner_email}}" disabled>
+                        </div>
+                    </div>
+                </div>
+
+                <div class='row'>
+                    <div class='mt-5'>
+                        <button class='btn btn-dark' type='submit' disabled>
+                            <a style="text-decoration: none; color:white;" href='#'>{% trans "ذخیره تغییرات" %}</a>
+                        </button>
+                    </div>
+                </div>
+            </form>
+
+            <div class='row'>
+                <div class='col-6 mt-5 mb-5'>
+                    <p>{% trans "محصولات پیشنهادی" %}</p>
+                    <div style='margin-right: 40%;'>
+                        <ul class="list-group">
+                            {% for organization_product in object.manufacturedـproducts.all %}
+                                {% for company_product in organization_product.companyproduct_set.all %}
+                                    <li class="list-group-item">{{company_product}}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+
+                <div class='col-6 mt-5'>
+                    <p>{% trans "محصولات تولیدی" %}</p>
+                    <div style='margin-right: 40%;'>
+                        <ul class="list-group">
+                            {% for organization_product in object.manufacturedـproducts.all %}
+                                <li class="list-group-item">{{organization_product}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
 {% endblock content %}
+
+
+{% block scripts %}
+    <script>
+
+    </script>
+{% endblock scripts %}

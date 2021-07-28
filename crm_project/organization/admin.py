@@ -10,39 +10,64 @@ class OrganizationProductAdmin(admin.ModelAdmin):
         'name',
     ]
 
+    ordering = ['-pk']
+
+    list_per_page = 7
+
+
+@admin.register(models.Province)
+class ProvinceAdmin(admin.ModelAdmin):
+    pass
+
 
 @admin.register(models.Organization)
 class OrganizationAdmin(admin.ModelAdmin):
 
     list_display = [
         'pk',
-        'province_name',
+        'province',
         'organization_name',
         'organization_phone_number',
         'workers_size',
-        'owner_full_name',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_second_last_name',
         'owner_phone_number',
         'owner_email',
-        'created_time',
+        'created_on',
         'expert_creator',
 
     ]
 
+    ordering = ['pk']
+
     search_fields = (
-        'province_name',
+        'province',
         'organization_name',
-        'owner_full_name',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_second_last_name',
         'expert_creator__username',
     )
 
     list_editable = [
+        'province',
         'owner_email',
         'expert_creator',
         'organization_phone_number',
-        'owner_full_name',
+        'owner_phone_number',
+        'owner_first_name',
+        'owner_last_name',
+        'owner_second_last_name',
     ]
 
     list_filter = (
-        'province_name',
+        'province',
         'expert_creator',
     )
+
+    list_per_page = 4
+
+    @admin.display(description='format datatime')
+    def created_on(self, obj):
+        return obj.created_time.strftime("%Y/%m/%d  ,  %H:%M:%S")

@@ -25,6 +25,7 @@ from django.urls.conf import include
 urlpatterns = [
     path("", include('users.urls', namespace="experts")),
     path('organization/', include('organization.urls', namespace='our-organization')),
+    path('marketing/', include('marketing.urls', namespace='marketing')),
     path('admin/', admin.site.urls),
 ]
 

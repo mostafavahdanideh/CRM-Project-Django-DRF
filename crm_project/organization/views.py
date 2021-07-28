@@ -8,7 +8,7 @@ class CreateOrganization(generic.CreateView):
     model = models.Organization
     template_name = 'register.html'
     form_class = forms.AddOrganizationForm
-    success_url = reverse_lazy("organization:register")
+    success_url = reverse_lazy("organization:list")
 
     def form_valid(self, form):
         form.instance.expert_creator = self.request.user

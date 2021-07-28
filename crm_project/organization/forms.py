@@ -5,12 +5,14 @@ class AddOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
         fields = [
-            'province_name',
+            'province',
             'organization_name',
             'organization_phone_number',
             'workers_size',
             'manufacturedـproducts',
-            'owner_full_name',
+            'owner_first_name',
+            'owner_last_name',
+            'owner_second_last_name',
             'owner_phone_number',
             'owner_email',
             

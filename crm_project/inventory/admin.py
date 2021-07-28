@@ -31,3 +31,5 @@ class CompanyProductAdmin(admin.ModelAdmin):
         'has_taxation',
         'price',
     ]
+
+    list_per_page = 4

@@ -14,36 +14,59 @@
         <form method='post' style="margin-left: 30%; margin-right: 10%; margin-top: 2%" class='text-center'>
             {% csrf_token %}
 
-            <div class="text-white">
-                <h2>{% trans "سازمان خود را تعریف کنید" %}</h2>
-            </div>
             <div class='row'>
-                <div class='col-6'>
-                    <div>
-                        <label for="province_name" class="form-label"></label>
-                        <input id='province_name' name='province_name' value='' class="form-control" style="text-align: right; text-indent: 10px;" type="text" placeholder="{% trans 'نام استان' %}">
-                    </div>
+                <div class="text-white" style='text-align: right;'>
+                    <h2>{% trans "سازمان خود را تعریف کنید" %}</h2>
                 </div>
+            </div>
+
+            <div class='row'>
                 <div class='col-6'>
                     <div>
                         <label for="organization_name" class="form-label"></label>
                         <input id='organization_name' name='organization_name' value='' style="text-align: right;" type="text" class="form-control" placeholder="{% trans 'نام سازمان' %}">
                     </div>
                 </div>
+
+                <div class='col-6'>
+                    <label for="province" class="form-label"></label>
+                    <select id='province' name='province' class="form-select">
+                        <option selected>{% trans 'نام استان' %}</option>
+                        {% for item in form.fields.province.queryset %}
+                            <option value="{{forloop.counter}}">{{item}}</option>
+                        {% endfor %}
+                    </select>
+                </div>
             </div>
 
             <div class='row'>
+                <div class='col-6'>
+                    <div>
+                        <label for="owner_first_name" class="form-label"></label>
+                        <input id='owner_first_name' name='owner_first_name' value='' style="text-align: right;" type="text" class="form-control" placeholder="{% trans 'نام مخاطب' %}">
+                    </div>
+                </div>
+
                 <div class='col-6'>
                     <div>
                         <label for="organization_phone_number" class="form-label"></label>
                         <input id='organization_phone_number' name='organization_phone_number' value='' style="text-align: right;" type="text" class="form-control" maxlength="11" placeholder="{% trans 'شماره تلفن سازمان' %}">
                     </div>
                 </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-6'>
+                    <div>
+                        <label for="owner_second_last_name" class="form-label"></label>
+                        <input id='owner_second_last_name' name='owner_second_last_name' value='' style="text-align: right;" type="text" class="form-control" placeholder="{% trans 'پسوند مخاطب (اختیاری)' %}">
+                    </div>
+                </div>
 
                 <div class='col-6'>
                     <div>
-                        <label for="owner_full_name" class="form-label"></label>
-                        <input id='owner_full_name' name='owner_full_name' value='' style="text-align: right;" type="text" class="form-control" placeholder="{% trans 'نام و نام خانوادگی کارفرما' %}">
+                        <label for="owner_last_name" class="form-label"></label>
+                        <input id='owner_last_name' name='owner_last_name' value='' style="text-align: right;" type="text" class="form-control" placeholder="{% trans 'نام خانوادگی مخاطب' %}">
                     </div>
                 </div>
             </div>
@@ -52,38 +75,46 @@
                 <div class='col-6'>
                     <div>
                         <label for="owner_phone_number" class="form-label"></label>
-                        <input id='owner_phone_number' name='owner_phone_number' value='' style="text-align: right;" type="text" class="form-control" maxlength="11" placeholder="{% trans 'شماره تلفن کارفرما' %}">
+                        <input id='owner_phone_number' name='owner_phone_number' value='' style="text-align: right;" type="text" class="form-control" maxlength="11" placeholder="{% trans 'شماره تلفن مخاطب' %}">
                     </div>
                 </div>
 
                 <div class='col-6'>
                     <div>
                         <label for="owner_email" class="form-label"></label>
-                        <input id='owner_email' name='owner_email' style="text-align: right;" type="email" class="form-control" placeholder="{% trans 'ایمیل کارفرما' %}">
+                        <input id='owner_email' name='owner_email' style="text-align: right;" type="email" class="form-control" placeholder="{% trans 'ایمیل مخاطب (اختیاری)' %}">
                     </div>
+                </div>
+            </div>
+
+            <div class='row' >
+                <div style="padding-left: 52%;">
+                    <label for="workers_size" class="form-label"></label>
+                    <input id='workers_size' name='workers_size' value='' style="text-align: left;" type="number" class="form-control" placeholder="{% trans 'تعداد کارگران' %}" min='1'>
                 </div>
             </div>
 
             <div class='row'>
                 <div>
-                    <label for="workers_size" class="form-label"></label>
-                    <input id='workers_size' name='workers_size' value='' style="text-align: left;" type="number" class="form-control" placeholder="{% trans 'تعداد کارگران' %}" min='1'>
-                </div>
-
-                <div>
-                    <label for="manufacturedـproducts" class="form-label"></label>
-                    <select id='manufacturedـproducts' name='manufacturedـproducts' style="text-align: right;" class="form-select" multiple>
-                        {% for item in form.fields.manufacturedـproducts.queryset %}
-                            {% if item %}
-                                <option value="{{forloop.counter}}">{{item}}</option>
-                            {% endif %}
-                        {% endfor %}
-                    </select>
+                    <div>
+                        <label for="manufacturedـproducts" class="form-label"></label>
+                        <select id='manufacturedـproducts' name='manufacturedـproducts' style="text-align: right;" class="form-select" multiple>
+                            {% for item in form.fields.manufacturedـproducts.queryset %}
+                                {% if item %}
+                                    <option value="{{forloop.counter}}">{{item}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
             </div>
 
-            <div class='mt-3 text-center' style="text-align: right;">
-                <button type='submit' class='btn btn-primary'>{% trans "ثبت" %}</button>
+            <div class='row'>
+                <div class='col-6'>
+                    <div class='mt-2' style="text-align: left;">
+                        <button type='submit' class='btn btn-dark'>{% trans "ثبت" %}</button>
+                    </div>
+                </div>
             </div>
         </form>
     </div>

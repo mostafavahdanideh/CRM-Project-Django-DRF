@@ -9,7 +9,7 @@
                 <tr>
                     <th>#</th>
                     <th>{% trans "نام سازمان" %}</th>
-                    <th>{% trans "کارفرما" %}</th>
+                    <th>{% trans "مخاطب" %}</th>
                     <th>{% trans "ثبت کننده" %}</th>
                     <th>{% trans "عملیات" %}</th>
                 </tr>
@@ -21,10 +21,10 @@
                         <td>
                             <a style='text-decoration: none; color: red;' href="{% url 'organization:detail' item.pk %}">{{item.organization_name}}</a>
                         </td>
-                        <td>{{item.owner_full_name}}</td>
+                        <td>{{item.owner_first_name}} {{item.owner_last_name}} {{item.owner_second_last_name}}</td>
                         <td>{{item.expert_creator}}</td>
                         <td>
-                            <a href="#" style='text-decoration: none; color: red;'>{% trans "عملیات پیگیری" %}</a>
+                            <a href="#" style='text-decoration: none; color: red;'>{% trans "ثبت پیگیری" %}</a>
                         </td>
                     </tr>
                 {% endfor %}
