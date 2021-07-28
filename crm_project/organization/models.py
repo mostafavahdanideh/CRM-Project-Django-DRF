@@ -29,7 +29,8 @@ class OrganizationProduct(models.Model):
 class Province(models.Model):
     name = models.CharField(
         verbose_name=_("استان"),
-        max_length=50
+        max_length=50,
+        unique=True
     )
 
     def __str__(self):
