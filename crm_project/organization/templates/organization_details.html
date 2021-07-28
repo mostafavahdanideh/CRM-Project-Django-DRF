@@ -14,27 +14,33 @@
         <div style="display: inline;">
             <a class="btn btn-secondary" href="{% url 'organization:list' %}" role="button" style="width: 12%;">{% trans "بازگشت" %}</a>
             <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "صدور پیش فاکتور" %}</a>
-            <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "ویرایش اطلاعات مخاطب" %}</a>
+            <button id='edited-btn' class="btn btn-secondary" style="width: 20%;" onclick="enableElements()">{% trans "ویرایش اطلاعات سازمان و مخاطب" %}</button>
             <a class="btn btn-secondary" href="{% url 'marketing:follow_up_history' object.pk %}" role="button" style="width: 20%;">{% trans "تاریخچه پیگیری سفارشات سازمان" %}</a>
         </div>
     </div>
 
     <div class='row'>
-        <div class='border border-white mt-lg-5 fs-5 fw-bold text-dark'>
+        <div class='border border-white mt-lg-5 mb-lg-5 fs-5 fw-bold text-dark'>
             <form method='post'>
                 {% csrf_token %}
+
                 <div class='row'>
                     <div class='col-4'>
-                        <div class='pt-lg-3'>
-                            <label class="form-label" for='province'>{% trans "نام استان" %}</label>
-                            <input class='form-control' id='province' name='province' value="{{object.province}}" disabled>
+                        <div class='mt-3'>
+                            <label for="province" class="form-label">{% trans "نام استان" %}</label>
+                            <select id='province' name='province' class="form-select will-update" disabled>
+                                <option value="{{object.province.pk}}" selected>{{object.province}}</option>
+                                {% for province in provinces %}
+                                    <option value="{{province.pk}}">{{province}}</option>
+                                {% endfor %}
+                            </select>
                         </div>
                     </div>
 
                     <div class='col-4'>
                         <div class='pt-lg-3'>
-                            <label class="form-label" for='organization_phone_number'>{% trans "تلفن" %}</label>
-                            <input class='form-control' id='organization_phone_number' name='organization_phone_number' value="{{object.organization_phone_number}}" disabled>
+                            <label class="form-label" for='organization_phone_number'>{% trans "تلفن سازمان" %}</label>
+                            <input type="text" maxlength='11' class='form-control will-update' id='organization_phone_number' name='organization_phone_number' value="{{object.organization_phone_number}}" disabled>
                         </div>
                     </div>
 
@@ -50,7 +56,7 @@
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='worker_size'>{% trans "تعداد کارگران" %}</label>
-                            <input class='form-control' id='worker_size' name='workers_size' value="{{object.workers_size}}" disabled>
+                            <input type="number" class='form-control will-update' id='worker_size' name='workers_size' value="{{object.workers_size}}" disabled>
                         </div>
                     </div>
 
@@ -64,7 +70,7 @@
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='phone_number'>{% trans "شماره تلفن مخاطب" %}</label>
-                            <input class='form-control' id='phone_number' name='owner_phone_number' value="{{object.owner_phone_number}}" disabled>
+                            <input type="text" maxlength='11' class='form-control will-update' id='phone_number' name='owner_phone_number' value="{{object.owner_phone_number}}" disabled>
                         </div>
                     </div>
                 </div>
@@ -73,21 +79,21 @@
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='owner_first_name'>{% trans "نام مخاطب" %}</label>
-                            <input class='form-control' id='owner_first_name' name='owner_first_name' value="{{object.owner_first_name}}" disabled>
+                            <input type="text" class='form-control will-update' id='owner_first_name' name='owner_first_name' value="{{object.owner_first_name}}" disabled>
                         </div>
                     </div>
 
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='owner_last_name'>{% trans "نام خانوادگی مخاطب" %}</label>
-                            <input class='form-control' id='owner_last_name' name='owner_last_name' value="{{object.owner_last_name}}" disabled>
+                            <input type="text" class='form-control will-update' id='owner_last_name' name='owner_last_name' value="{{object.owner_last_name}}" disabled>
                         </div>
                     </div>
 
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='owner_second_last_name'>{% trans "نام پسوندی مخاطب" %}</label>
-                            <input class='form-control' id='owner_second_last_name' name='owner_second_last_name' value="{{object.owner_second_last_name}}" disabled>
+                            <input type="text" class='form-control will-update' id='owner_second_last_name' name='owner_second_last_name' value="{{object.owner_second_last_name}}" disabled>
                         </div>
                     </div>
                 </div>
@@ -96,42 +102,49 @@
                     <div class='col-4'>
                         <div class='pt-lg-3'>
                             <label class="form-label" for='owner_email'>{% trans "ایمیل مخاطب" %}</label>
-                            <input class='form-control' id='owner_email' name='owner_email' value="{{object.owner_email}}" disabled>
+                            <input type="text" class='form-control will-update' id='owner_email' name='owner_email' value="{{object.owner_email}}" disabled>
                         </div>
-                    </div>
-                </div>
-
-                <div class='row'>
-                    <div class='mt-5'>
-                        <button class='btn btn-dark' type='submit' disabled>
-                            <a style="text-decoration: none; color:white;" href='#'>{% trans "ذخیره تغییرات" %}</a>
-                        </button>
                     </div>
                 </div>
             </form>
 
             <div class='row'>
-                <div class='col-6 mt-5 mb-5'>
-                    <p>{% trans "محصولات پیشنهادی" %}</p>
-                    <div style='margin-right: 40%;'>
-                        <ul class="list-group">
-                            {% for organization_product in object.manufacturedـproducts.all %}
-                                {% for company_product in organization_product.companyproduct_set.all %}
-                                    <li class="list-group-item">{{company_product}}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
+                <div class='mt-5'>
+                    <button id='submit-btn' class='btn btn-dark' style="color:white;" data-object-id="{{object.pk}}" disabled>{% trans "ذخیره تغییرات" %}</button>
+                </div>
+            </div>
+
+            <div class='row'>
+                <div class='col-7 mt-5'>
+                    <div class='pt-lg-3 me-lg-5'>
+                        <div id='form-result-alert' class="alert" role="alert">
+                        </div>‍
                     </div>
                 </div>
 
-                <div class='col-6 mt-5'>
-                    <p>{% trans "محصولات تولیدی" %}</p>
-                    <div style='margin-right: 40%;'>
-                        <ul class="list-group">
-                            {% for organization_product in object.manufacturedـproducts.all %}
-                                <li class="list-group-item">{{organization_product}}</li>
-                            {% endfor %}
-                        </ul>
+                <div class='col-5 mt-5 mb-5 pe-lg-5'>
+                    <div class='row'>
+                        <p>{% trans "محصولات تولیدی" %}</p>
+                        <div style='margin-right: 40%;'>
+                            <ul class="list-group">
+                                {% for organization_product in object.manufacturedـproducts.all %}
+                                    <li class="list-group-item">{{organization_product}}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class='row mt-5'>
+                        <p>{% trans "محصولات پیشنهادی" %}</p>
+                        <div style='margin-right: 40%;'>
+                            <ul class="list-group">
+                                {% for organization_product in object.manufacturedـproducts.all %}
+                                    {% for company_product in organization_product.companyproduct_set.all %}
+                                        <li class="list-group-item">{{company_product}}</li>
+                                    {% endfor %}
+                                {% endfor %}
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -143,6 +156,77 @@
 
 {% block scripts %}
     <script>
+        function enableElements() {
+            let input_elements = $(".will-update");
+            let submit_btn = $("[id=submit-btn]");
+            let edited_btn = $("[id=edited-btn]");
+            
+            for(let i=0; i<input_elements.length; i++){
+                $(input_elements[i]).removeAttr('disabled');
+            }
 
+            submit_btn.removeAttr('disabled');
+            edited_btn.attr("disabled", true);
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function(){
+            let submit_btn = $("[id=submit-btn]");
+            let input_elements = $(".will-update");
+
+            submit_btn.click(function(event){
+                let csrf_token = getCookie('csrftoken');
+                let organization_id = event.currentTarget.dataset["objectId"];
+
+                $.ajax(
+                    {
+                        url: "{% url 'organization:update' %}" + "?pk=" + organization_id,
+                        method: 'POST',
+                        headers: {'X-CSRFToken': csrf_token},
+                        data: {
+                            province: $(input_elements[0]).val(),
+                            organization_phone_number: $(input_elements[1]).val(),
+                            workers_size: $(input_elements[2]).val(),
+                            owner_phone_number: $(input_elements[3]).val(),
+                            owner_first_name: $(input_elements[4]).val(),
+                            owner_last_name: $(input_elements[5]).val(),
+                            owner_second_last_name: $(input_elements[6]).val(),
+                            owner_email: $(input_elements[7]).val(),
+                        },
+
+                        success: function(response){
+                            let alert_elm = $('[id=form-result-alert]');
+                            alert_elm.addClass('alert-info');
+                            alert_elm.html(response['messages']);
+                        },
+
+                        error: function(errors) {
+                            let messages = errors.responseJSON['messages'];
+                            let alert_elm = $('[id=form-result-alert]');
+                            alert_elm.addClass('alert-danger');
+
+                            for(var prop in messages) {
+                                var item = messages[prop];
+                                alert_elm.html(prop+" : "+item);
+                            }
+                        }
+                    }
+                );
+            });
+        });
     </script>
 {% endblock scripts %}
