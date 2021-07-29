@@ -1,6 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.views import generic
 from . import models
+from organization import models as org_models
 
 
 class OrganizationFollowUpHistory(generic.ListView):
@@ -15,3 +16,9 @@ class OrganizationFollowUpHistory(generic.ListView):
             qs = qs.filter(expert_creator=self.request.user, pk=pk)
 
         return qs
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        organization_obj = get_object_or_404(klass=org_models.Organization, pk=self.kwargs.get('pk', None))
+        context['organization'] = organization_obj
+        return context
