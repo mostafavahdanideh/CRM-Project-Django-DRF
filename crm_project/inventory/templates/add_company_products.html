@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block style %}
+    .form-check-input:checked {
+        background-color: black;
+    }
+{% endblock style %}
+
+
+{% block content %}
+    <div style="margin-left: 25%; margin-right: 25; margin-top: 5%;">
+        <form method="post">
+            {% csrf_token %}
+
+            <div class='row mt-5'>
+                <div class='col-3'>
+                    <label for="id_company_product_name" class='form-label'></label>
+                    <input id='id_company_product_name' name="name" type="text" value="" class='form-control' placeholder="{% trans "نام محصول سازمان" %}"></input>
+                </div>
+
+                <div class='col-3'>
+                    <label for="id_price" class='form-label'></label>
+                    <input id='id_price' name="price" type="text" value="" class='form-control' placeholder="{% trans "قیمت" %}"></input>
+                </div>
+
+                <div class='col-3 mt-3'>
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" value="" name="has_taxation" id="id_has_taxation" style="width: 20px; heigth: 300px;" checked>
+                        <label class="form-check-label fs-5 fw-bold" for="id_has_taxation">
+                            {% trans "مشمول مالیات است؟" %}
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class='row mt-lg-3'>
+                <div class='col-4'>
+                    <label for="id_technical_features" class='form-label'></label>
+                    <textarea id="id_technical_features" name="technical_features" value="" style="resize: none" class='form-control' maxlength="300" cols="40" rows="10" placeholder="{% trans "ویژگی های فنی" %}"></textarea>
+                </div>
+
+                <div class='col-4'>
+                    <div>
+                        <label for="id_related_with_manufacturedـproducts" class="form-label"></label>
+                        <select id='id_related_with_manufacturedـproducts' name='related_with_manufacturedـproducts' class="form-select" multiple>
+                            {% for organization_product in all_organization_products %}
+                                {% if organization_product %}
+                                    <option value="{{organization_product.pk}}">{{organization_product}}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class='row mt-5'>
+                <p class='fw-bold fs-5'>{% trans 'لطفا فایل پی دی اف مربوطه را آپلود کنید' %}</p>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="id_pdf_catalog" style="visibility:hidden;"></label>
+                    <input type="file" class="form-control" id="id_pdf_catalog" name='pdf_catalog' value="" accept="application/pdf" style="margin-right: 330px;">
+                </div>
+            </div>
+
+            <div class='row mt-5'>
+                <p class='fw-bold fs-5'>{% trans 'لطفا عکس مربوطه را آپلود کنید' %}</p>
+                <div class="input-group mb-3">
+                    <label class="input-group-text" for="id_image_catalog" style="visibility:hidden;"></label>
+                    <input type="file" class="form-control" id="id_image_catalog" name='image_catalog' value="" accept="image/*" style="margin-right: 330px;">
+                </div>
+            </div>
+
+            <div class='row mt-5'>
+                <div class='text-white'>
+                    <button class="btn btn-dark" type='submit' >{% trans "ثبت محصول سازمان" %}</button>
+                </div>
+            <div>
+        </form>
+    </div>
+{% endblock content %}

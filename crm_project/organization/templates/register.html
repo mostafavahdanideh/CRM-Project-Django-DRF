@@ -101,7 +101,7 @@
                         <select id='manufacturedـproducts' name='manufacturedـproducts' style="text-align: right;" class="form-select" multiple>
                             {% for item in form.fields.manufacturedـproducts.queryset %}
                                 {% if item %}
-                                    <option value="{{forloop.counter}}">{{item}}</option>
+                                    <option value="{{item.pk}}">{{item}}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>

@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class='text-white mt-lg-5' style="margin-left: 15%; margin-right: 15%;">
+        <table class='table table-dark'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans "نام محصول سازمان" %}</th>
+                    <th>{% trans "قیمت" %}</th>
+                    <th>{% trans "مشمول مالیات" %}</th>
+                    <th>{% trans "پی دی اف کاتالوگ" %}</th>
+                    <th>{% trans "عکس کاتالوگ" %}</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for company_product in object_list %}
+                    <tr>
+                        <th>{{forloop.counter}}</th>
+                        <th>{{company_product.name}}</th>
+                        <th>{{company_product.price}}</th>
+                        <th>
+                            {% if company_product.has_taxation %}
+                                {% trans "بله" %}
+                            {% else %}
+                                {% trans "خیر" %}
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if company_product.pdf_catalog %}
+                                <button class='btn btn-success'>
+                                    <a href="{{company_product.pdf_catalog.url}}" style='text-decoration: none; color: white;'>{% trans "دانلود" %}</a>
+                                </button>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </th>
+                        <th>
+                            {% if company_product.image_catalog %}
+                                <button class='btn btn-success'>
+                                    <a href="{{company_product.image_catalog.url}}" style='text-decoration: none; color: white;'>{% trans "دانلود" %}</a>
+                                </button>
+                            {% else %}
+                                -
+                            {% endif %}
+                        </th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% include "pagination.html" %}
+{% endblock content %}

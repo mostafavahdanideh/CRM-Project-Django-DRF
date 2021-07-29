@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+
+{% block content %}
+    <div class='text-white mt-lg-5' style="margin-left: 25%; margin-right: 25%;">
+        <table class='table table-dark'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans "نام محصول تولیدی" %}</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for item in object_list %}
+                    <tr>
+                        <th>{{forloop.counter}}</th>
+                        <th>{{item.name}}</th>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% include "pagination.html" %}
+{% endblock content %}

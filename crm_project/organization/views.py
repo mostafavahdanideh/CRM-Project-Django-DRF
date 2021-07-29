@@ -8,6 +8,23 @@ from . import forms, models
 from inventory import models as inventory_models
 
 
+class ListOrganizationProduct(LoginRequiredMixin, generic.ListView):
+    template_name = "list_organization_product.html"
+    model = models.OrganizationProduct
+    paginate_by = 10
+
+
+class AddOrganizationProduct(LoginRequiredMixin, generic.CreateView):
+    template_name = 'add_organization_products.html'
+    form_class = forms.AddOrganizationProductsForm
+    model = models.OrganizationProduct
+    success_url = reverse_lazy("organization:list-organization-product")
+
+    def form_invalid(self, form):
+        messages.info(self.request, form.errors)
+        return super().form_invalid(form)
+
+
 class CreateOrganization(LoginRequiredMixin, generic.CreateView):
     model = models.Organization
     template_name = 'register.html'

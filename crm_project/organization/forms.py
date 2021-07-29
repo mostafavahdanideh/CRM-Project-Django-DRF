@@ -1,6 +1,7 @@
 from django import forms
 from . import models
 
+
 class AddOrganizationForm(forms.ModelForm):
     class Meta:
         model = models.Organization
@@ -16,4 +17,12 @@ class AddOrganizationForm(forms.ModelForm):
             'owner_phone_number',
             'owner_email',
             
+        ]
+
+
+class AddOrganizationProductsForm(forms.ModelForm):
+    class Meta:
+        model = models.OrganizationProduct
+        fields = [
+            'name',
         ]
