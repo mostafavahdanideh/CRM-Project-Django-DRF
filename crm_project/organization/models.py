@@ -94,7 +94,7 @@ class Organization(models.Model):
 
     owner_email = models.EmailField(
         verbose_name=_('ایمیل مخاطب'),
-        blank=True
+        unique=True
     )
 
     created_time = jmodels.jDateTimeField(
