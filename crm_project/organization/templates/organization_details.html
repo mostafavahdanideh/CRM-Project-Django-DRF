@@ -14,7 +14,7 @@
         <div style="display: inline;">
             <a class="btn btn-secondary" href="{% url 'organization:list' %}" role="button" style="width: 12%;">{% trans "بازگشت" %}</a>
             <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "صدور پیش فاکتور" %}</a>
-            <button id='edited-btn' class="btn btn-secondary" style="width: 20%;" onclick="enableElements()">{% trans "ویرایش اطلاعات سازمان و مخاطب" %}</button>
+            <button id='edited-btn' class="btn btn-secondary" style="width: 20%;">{% trans "ویرایش اطلاعات سازمان و مخاطب" %}</button>
             <a class="btn btn-secondary" href="{% url 'marketing:follow_up_history' object.pk %}" role="button" style="width: 20%;">{% trans "تاریخچه پیگیری سفارشات سازمان" %}</a>
         </div>
     </div>
@@ -46,7 +46,7 @@
 
                     <div class='col-4'>
                         <div class='pt-lg-3'>
-                            <label class="form-label" for='created_time'>{% trans "تاریخ ثبت" %}</label>
+                            <label class="form-label" for='created_time'>{% trans "تاریخ ایجاد شده" %}</label>
                             <input class='form-control' id='created_time' name='created_time' value="{{object.created_time|date:"Y-m-d , H:i:s" }}" disabled>
                         </div>
                     </div>
@@ -62,7 +62,7 @@
 
                     <div class='col-4'>
                         <div class='pt-lg-3'>
-                            <label class="form-label" for='creator'>{% trans "ثبت توسط" %}</label>
+                            <label class="form-label" for='creator'>{% trans "ایجاد شده توسط" %}</label>
                             <input class='form-control' id='creator' name='expert_creator' value="{{object.expert_creator}}" disabled>
                         </div>
                     </div>
@@ -118,6 +118,7 @@
                 <div class='col-7 mt-5'>
                     <div class='pt-lg-3 me-lg-5'>
                         <div id='form-result-alert' class="alert" role="alert">
+                            <span class="badge bg-secondary position-absolute top-50 start-100 translate-middle"></span>
                         </div>‍
                     </div>
                 </div>
@@ -138,10 +139,8 @@
                         <p>{% trans "محصولات پیشنهادی" %}</p>
                         <div style='margin-right: 40%;'>
                             <ul class="list-group">
-                                {% for organization_product in object.manufacturedـproducts.all %}
-                                    {% for company_product in organization_product.companyproduct_set.all %}
-                                        <li class="list-group-item">{{company_product}}</li>
-                                    {% endfor %}
+                                {% for suggestion_product in suggestion_products %}
+                                    <li class="list-group-item">{{suggestion_product}}</li>
                                 {% endfor %}
                             </ul>
                         </div>
@@ -156,7 +155,11 @@
 
 {% block scripts %}
     <script>
-        function enableElements() {
+
+        let error_count=1;
+        let success_count=1;
+
+        function activeElements() {
             let input_elements = $(".will-update");
             let submit_btn = $("[id=submit-btn]");
             let edited_btn = $("[id=edited-btn]");
@@ -210,23 +213,50 @@
 
                         success: function(response){
                             let alert_elm = $('[id=form-result-alert]');
+                            let span = alert_elm.find('span');
+                            let alert_info_elm = $('.alert-info');
+                            error_count = 1;
+
+                            if (alert_info_elm.length==1){
+                                success_count = success_count + 1;
+                            }
+
+                            span.html(success_count);
+                            span.before(response['messages'] + "<br>");
                             alert_elm.addClass('alert-info');
-                            alert_elm.html(response['messages']);
+                            alert_elm.removeClass('alert-danger');
                         },
 
                         error: function(errors) {
                             let messages = errors.responseJSON['messages'];
                             let alert_elm = $('[id=form-result-alert]');
-                            alert_elm.addClass('alert-danger');
+                            let span = alert_elm.find('span');
+                            let alert_danger_elm = $('.alert-danger');
+                            success_count = 1;
 
-                            for(var prop in messages) {
-                                var item = messages[prop];
-                                alert_elm.html(prop+" : "+item);
+                            if (alert_danger_elm.length==1){
+                                error_count = error_count + 1;
+                            }
+
+                            if (span.length==0){
+                                alert_elm.append("<span class='badge bg-secondary position-absolute top-50 start-100 translate-middle'></span>");
+                            }
+
+                            $(span).html(error_count);
+                            alert_elm.addClass('alert-danger');
+                            alert_elm.addClass('alert-info');
+
+                            for(var key in messages) {
+                                var message = messages[key];
+                                span.before(key + " : " + message + "<br>");
                             }
                         }
                     }
                 );
             });
         });
+
+        document.getElementById("edited-btn").addEventListener("click", activeElements);
+
     </script>
 {% endblock scripts %}

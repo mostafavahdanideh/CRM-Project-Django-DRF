@@ -1,5 +1,6 @@
 from django.http.response import Http404, JsonResponse
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -7,7 +8,7 @@ from . import forms, models
 from inventory import models as inventory_models
 
 
-class CreateOrganization(generic.CreateView):
+class CreateOrganization(LoginRequiredMixin, generic.CreateView):
     model = models.Organization
     template_name = 'register.html'
     form_class = forms.AddOrganizationForm
@@ -22,7 +23,7 @@ class CreateOrganization(generic.CreateView):
         return super().form_invalid(form)
     
 
-class ListOrganization(generic.ListView):
+class ListOrganization(LoginRequiredMixin, generic.ListView):
     model = models.Organization
     template_name = "organization_list.html"
     paginate_by = 3
@@ -36,19 +37,40 @@ class ListOrganization(generic.ListView):
         return qs
 
 
-class DetailOrganization(generic.DetailView):
+class DetailOrganization(LoginRequiredMixin, generic.DetailView):
     template_name = 'organization_details.html'
     model = models.Organization
 
+    def organization_for_user_exists(self):
+        qs =  self.get_queryset()
+        exists = qs.filter(expert_creator=self.request.user).filter(pk=self.kwargs.get('pk', None)).exists()
+        return exists
+
+    def get(self, request, *args, **kwargs):
+        if self.organization_for_user_exists() or self.request.user.is_superuser:
+            return super().get(request, *args, **kwargs)
+        else:
+            return redirect("organization:list")
+    
+    def get_suggestion_products(self):
+        organization_obj = self.get_object()
+        manufacturedـproducts = organization_obj.manufacturedـproducts.all()
+        unique_suggestion_products = inventory_models.CompanyProduct.objects.filter(related_with_manufacturedـproducts__in=manufacturedـproducts).distinct()
+        return unique_suggestion_products
+
+    def get_provinces(self, context):
+        organization_object = context['object']
+        qs_provinces = models.Province.objects.exclude(name=organization_object.province)
+        return qs_provinces
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        organization_object = context['object']
-        qs_province = models.Province.objects.exclude(name=organization_object.province)
-        context['provinces'] = qs_province
+        context['provinces'] = self.get_provinces(context)
+        context['suggestion_products'] = self.get_suggestion_products()
         return context
 
 
-class UpdateOrganization(generic.UpdateView):
+class UpdateOrganization(LoginRequiredMixin, generic.UpdateView):
     queryset = models.Organization.objects.all()
     fields = (
         'province',
