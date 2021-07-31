@@ -8,15 +8,21 @@
             <thead>
                 <tr>
                     <th>#</th>
-                    <th>{% trans "نام محصول تولیدی" %}</th>
+                    <th>{% trans "نام محصولات تولیدی" %}</th>
+                    <th>{% trans "نام محصولات پیشنهادی" %}</th>
                 </tr>
             </thead>
 
             <tbody>
-                {% for item in object_list %}
+                {% for organization_product in object_list %}
                     <tr>
                         <th>{{forloop.counter}}</th>
-                        <th>{{item.name}}</th>
+                        <th>{{organization_product.name}}</th>
+                        <th>
+                            {% for suggestion_product in organization_product.companyproduct_set.all %}
+                                {{suggestion_product}}<span class='text-danger fw-bold fs-4'>،</span>
+                            {% endfor %}
+                        </th>
                     </tr>
                 {% endfor %}
             </tbody>

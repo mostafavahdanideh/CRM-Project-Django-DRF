@@ -12,6 +12,9 @@
     <link href={% static 'bootstrap/bootstrap.css' %} rel='stylesheet'></link>
     <link href={% static 'bootstrap/bootstrap.min.css' %} rel='stylesheet'></link>
     <style>
+        .form-check-input:checked {
+            background-color: black;
+        }
         {% block style %}{% endblock style %}
     </style>
 </head>
@@ -24,54 +27,75 @@
                     <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
 
                     {% if request.user.is_authenticated %}
+
                         <a class="navbar-brand text-white" href="#">{{request.user}}</a>
+
+                        <a class="navbar-brand text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
+                        
+                        {% if request.user.is_superuser %}
+                            <a class="navbar-brand text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
+                        {% endif %}
+                    {% else %}
+                        <a class="navbar-brand text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
                     {% endif %}
 
                     <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
-                        <ul class="navbar-nav">
+                        {% if request.user.is_authenticated %}
 
-                            {% if request.user.is_authenticated %}
+                            <div class="dropdown dropstart">
+                                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="list_drop_down" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% trans "لیست" %}
+                                </a>
 
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'expert:logout' %}">{% trans "خروج" %}</a>
-                                </li>
+                                <ul class="dropdown-menu" aria-labelledby="list_drop_down">
+                                    {% if request.user.is_authenticated %}
+                                        <li>
+                                            <a class="dropdown-item text-dark" href="{% url 'marketing:list_quotes' %}">{% trans "پیش فاکتورها" %}</a>
+                                        </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'organization:register' %}">{% trans "تعریف سازمان" %}</a>
-                                </li>
+                                        <li>
+                                            <a class="dropdown-item text-dark" href="{% url 'organization:list' %}">{% trans "سازمان ها" %}</a>
+                                        </li>
 
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'organization:list' %}">{% trans "لیست سازمان ها" %}</a>
-                                </li>
+                                        {% if request.user.is_superuser %}
+                                            <li>
+                                                <a class="dropdown-item text-dark" href="{% url 'organization:list-organization-product' %}">{% trans "محصولات تولیدی" %}</a>
+                                            </li>
 
-                            {% else %}
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
-                                </li>
-                            {% endif %}
-                        
-                            {% if request.user.is_superuser %}
-                                <li class="nav-item">
-                                    <a class="nav-link active text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
-                                </li>
+                                            <li>
+                                                <a class="dropdown-item text-dark" href="{% url 'inventory:list-company-products' %}">{% trans "محصولات سازمان" %}</a>
+                                            </li>
+                                        {% endif %}
+                                {% endif %}
+                                </ul>
+                            </div>
 
-                                <li>
-                                    <a class="nav-link active text-white" href="{% url 'organization:add-organization-product' %}">{% trans "ایجاد محصولات تولیدی" %}</a>
-                                </li>
+                            <div class="dropdown dropstart">
+                                <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="define_drop_down" data-bs-toggle="dropdown" aria-expanded="false">
+                                    {% trans "ایجاد" %}
+                                </a>
 
-                                <li>
-                                    <a class="nav-link active text-white" href="{% url 'organization:list-organization-product' %}">{% trans "لیست محصولات تولیدی" %}</a>
-                                </li>
+                                <ul class="dropdown-menu" aria-labelledby="define_drop_down">
+                                    <li>
+                                        <a class="dropdown-item text-dark" href="{% url 'marketing:create_quote' %}">{% trans "پیش فاکتورها" %}</a>
+                                    </li>
 
-                                <li>
-                                    <a class="nav-link active text-white" href="{% url 'inventory:add-company-product' %}">{% trans "تعریف محصولات سازمان" %}</a>
-                                </li>
+                                    <li>
+                                        <a class="dropdown-item text-dark" href="{% url 'organization:register' %}">{% trans "سازمان ها" %}</a>
+                                    </li>
 
-                                <li>
-                                    <a class="nav-link active text-white" href="{% url 'inventory:list-company-products' %}">{% trans "لیست محصولات سازمان" %}</a>
-                                </li>
-                            {% endif %}
-                        </ul>
+                                    {% if request.user.is_superuser %}
+                                        <li>
+                                            <a class="dropdown-item text-dark" href="{% url 'organization:add-organization-product' %}">{% trans "محصولات تولیدی" %}</a>
+                                        </li>
+
+                                        <li>
+                                            <a class="dropdown-item text-dark" href="{% url 'inventory:add-company-product' %}">{% trans "محصولات سازمان" %}</a>
+                                        </li>
+                                    {% endif %}
+                                </ul>
+                            </div>
+                        {% endif %}
                     </div>
                 </nav>
             </div>
