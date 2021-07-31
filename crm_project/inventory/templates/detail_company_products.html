@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+
+{% block style %}
+    .list-group{
+        max-height: 260px;
+        margin-bottom: 10px;
+        overflow:scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+{% endblock style %}
+
+
+{% block content %}
+    <div style="margin-left: 25%; margin-top: 10%; margin-bottom: 15%;">
+        <div class='row mt-5'>
+            <div class='col-3'>
+                <label for="id_company_product_name" class='form-label fs-5 fw-bold'>{% trans "نام محصول سازمان" %}</label>
+                <input id='id_company_product_name' value="{{object.name}}" class='form-control' disabled></input>
+            </div>
+
+            <div class='col-3'>
+                <label for="id_price" class='form-label fs-5 fw-bold'>{% trans "قیمت (تومان)" %}</label>
+                <input id='id_price' class='form-control' value="{{object.price|intcomma}}" disabled></input>
+            </div>
+
+            <div class='col-3 mt-2'>
+                <p class='fs-5 fw-bold'>{% trans "مشمول مالیات است؟" %}</p>
+                <div class="ms-4">
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label fs-5 fw-bold" for="id_has_taxation_true">{% trans "بله" %}</label>
+                        <input class="form-check-input" type="checkbox" id="id_has_taxation_true" {% if object.has_taxation %} checked {% endif %} disabled>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label fs-5 fw-bold" for="id_has_taxation_false">{% trans "خیر" %}</label>
+                        <input class="form-check-input" type="checkbox" id="id_has_taxation_false" {% if not object.has_taxation %} checked {% endif %} disabled>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class='row mt-5'>
+            <div class='col-4'>
+                <label class="form-label fs-5 fw-bold">{% trans "ویژگی های فنی" %}</label>
+                <textarea cols="30" rows="10" style="background-color: white; color:black; resize: none;" disabled>{{object.technical_features}}</textarea>
+            </div>
+
+            <div class='col-4'>
+                <label class="form-label fs-5 fw-bold">{% trans "محصولات پیشنهادی" %}</label>
+                <ol class="list-group list-group-numbered">
+                    {% for manufacturedـproduct in object.related_with_manufacturedـproducts.all %}
+                        <li class="list-group-item fs-5 fw-bold">{{manufacturedـproduct}}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+
+        <div class='mt-lg-3'>
+            {% if object.pdf_catalog %}
+                <button class='btn btn-dark'>
+                    <a href="{{object.pdf_catalog.url}}" style='text-decoration: none; color: white;'>{% trans "دانلود پی دی اف کاتالوگ" %}</a>
+                </button>
+            {% endif %}
+
+            {% if object.image_catalog %}
+                <button class='btn btn-dark'>
+                    <a href="{{object.image_catalog.url}}" style='text-decoration: none; color: white;'>{% trans "دانلود عکس کاتالوگ" %}</a>
+                </button>
+            {% endif %}
+
+            <a href="{% url 'inventory:update-company-product' pk=object.pk %}" type='btn' class='btn btn-dark text-white'>{% trans "ویرایش اطلاعات" %}</a>
+        </div>
+    </div>
+{% endblock content %}

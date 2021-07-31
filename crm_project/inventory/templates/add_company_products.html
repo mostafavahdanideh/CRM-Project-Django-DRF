@@ -2,27 +2,20 @@
 {% load i18n %}
 
 
-{% block style %}
-    .form-check-input:checked {
-        background-color: black;
-    }
-{% endblock style %}
-
-
 {% block content %}
     <div style="margin-left: 25%; margin-right: 25; margin-top: 5%;">
-        <form method="post">
+        <form method="post" enctype="multipart/form-data">
             {% csrf_token %}
 
             <div class='row mt-5'>
                 <div class='col-3'>
                     <label for="id_company_product_name" class='form-label'></label>
-                    <input id='id_company_product_name' name="name" type="text" value="" class='form-control' placeholder="{% trans "نام محصول سازمان" %}"></input>
+                    <input id='id_company_product_name' pattern="\D*" name="name" type="text" value="" class='form-control' placeholder="{% trans "نام محصول سازمان" %}"></input>
                 </div>
 
                 <div class='col-3'>
                     <label for="id_price" class='form-label'></label>
-                    <input id='id_price' name="price" type="text" value="" class='form-control' placeholder="{% trans "قیمت" %}"></input>
+                    <input id='id_price' name="price" type="number" value="" class='form-control' placeholder="{% trans "قیمت (تومان)" %}" min='0'></input>
                 </div>
 
                 <div class='col-3 mt-3'>
@@ -44,7 +37,7 @@
                 <div class='col-4'>
                     <div>
                         <label for="id_related_with_manufacturedـproducts" class="form-label"></label>
-                        <select id='id_related_with_manufacturedـproducts' name='related_with_manufacturedـproducts' class="form-select" multiple>
+                        <select id='id_related_with_manufacturedـproducts' name='related_with_manufacturedـproducts' class="form-select" size="11" multiple>
                             {% for organization_product in all_organization_products %}
                                 {% if organization_product %}
                                     <option value="{{organization_product.pk}}">{{organization_product}}</option>
@@ -56,7 +49,7 @@
             </div>
 
             <div class='row mt-5'>
-                <p class='fw-bold fs-5'>{% trans 'لطفا فایل پی دی اف مربوطه را آپلود کنید' %}</p>
+                <p class='fw-bold fs-5'>{% trans 'لطفا فایل پی دی اف کاتالوگ را آپلود کنید. (اختیاری)' %}</p>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="id_pdf_catalog" style="visibility:hidden;"></label>
                     <input type="file" class="form-control" id="id_pdf_catalog" name='pdf_catalog' value="" accept="application/pdf" style="margin-right: 330px;">
@@ -64,7 +57,7 @@
             </div>
 
             <div class='row mt-5'>
-                <p class='fw-bold fs-5'>{% trans 'لطفا عکس مربوطه را آپلود کنید' %}</p>
+                <p class='fw-bold fs-5'>{% trans 'لطفا عکس کاتالوگ را آپلود کنید. (اختیاری)' %}</p>
                 <div class="input-group mb-3">
                     <label class="input-group-text" for="id_image_catalog" style="visibility:hidden;"></label>
                     <input type="file" class="form-control" id="id_image_catalog" name='image_catalog' value="" accept="image/*" style="margin-right: 330px;">

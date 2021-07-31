@@ -2,7 +2,7 @@ from django import forms
 from . import models
 
 
-class AddCompanyProductForm(forms.ModelForm):
+class CompanyProductForm(forms.ModelForm):
 
     class Meta:
         model = models.CompanyProduct

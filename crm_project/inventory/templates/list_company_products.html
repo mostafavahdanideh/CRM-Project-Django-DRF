@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load humanize %}
 
 
 {% block content %}
@@ -9,7 +10,7 @@
                 <tr>
                     <th>#</th>
                     <th>{% trans "نام محصول سازمان" %}</th>
-                    <th>{% trans "قیمت" %}</th>
+                    <th>{% trans "قیمت (تومان)" %}</th>
                     <th>{% trans "مشمول مالیات" %}</th>
                     <th>{% trans "پی دی اف کاتالوگ" %}</th>
                     <th>{% trans "عکس کاتالوگ" %}</th>
@@ -20,8 +21,10 @@
                 {% for company_product in object_list %}
                     <tr>
                         <th>{{forloop.counter}}</th>
-                        <th>{{company_product.name}}</th>
-                        <th>{{company_product.price}}</th>
+                        <th>
+                            <a href="{% url 'inventory:detail-company-product' pk=company_product.pk %}" style='text-decoration: none; color:red;'>{{company_product.name}}</a>
+                        </th>
+                        <th>{{company_product.price|intcomma}}</th>
                         <th>
                             {% if company_product.has_taxation %}
                                 {% trans "بله" %}
@@ -52,6 +55,5 @@
             </tbody>
         </table>
     </div>
-
     {% include "pagination.html" %}
 {% endblock content %}

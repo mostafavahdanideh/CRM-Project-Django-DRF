@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <div style='margin-left: 25%; margin-top: 10%;'>
+        <form method='post' enctype="multipart/form-data">
+            {% csrf_token %}
+
+            <div class='row mt-5'>
+                <div class='col-3'>
+                    <label for="id_name" class='form-label fs-5 fw-bold'>{% trans "نام محصول سازمان" %}</label>
+                    {% render_field form.name|add_class:"form-control"|attr:"pattern:\D*" %}
+                </div>
+
+                <div class='col-3'>
+                    <label for="id_price" class='form-label fs-5 fw-bold'>{% trans "قیمت (تومان)" %}</label>
+                    {% render_field form.price|add_class:"form-control"|attr:"min:0" %}
+                </div>
+
+                <div class='col-3 mt-lg-5'>
+                    {% render_field form.has_taxation|add_class:"form-check-input" %}
+                    <label for="id_has_taxaction" class='form-check-label fs-5 fw-bold'>{% trans "مشمول مالیات است؟" %}</label>
+                </div>
+            </div>
+
+            <div class='row mt-5'>
+                <div class='col-5'>
+                    <label for="id_technical_features" class='form-label fs-5 fw-bold'>{% trans "ویژگی های فنی" %}</label>
+                    {% render_field form.technical_features|add_class:"form-control"|attr:"style:resize: none" %}
+                </div>
+
+                <div class='col-4'>
+                    <label for="id_related_with_manufacturedـproducts" class='form-label fs-5 fw-bold'>{% trans "محصولات تولیدی" %}</label>
+                    {% render_field form.related_with_manufacturedـproducts|add_class:"form-control"|attr:"size:11" %}
+                </div>
+            </div>
+
+            <div class='row mt-5' style="margin-right: 260px; margin-left: 5px;">
+                <p class='fs-5 fw-bold'>
+                    <label for="id_pdf_catalog" class='form-label fs-5 fw-bold'>{% trans 'لطفا فایل پی دی اف کاتالوگ را آپلود کنید. (اختیاری)' %}</label>
+                    </br>
+                    {% render_field form.pdf_catalog|add_class:"form-control"|attr:"accept:application/pdf" %}
+                </p>
+            </div>
+
+            <div class='row mt-5' style="margin-right: 260px; margin-left: 5px;">
+                <p class='fs-5 fw-bold'>
+                    <label for="id_image_catalog" class='form-label fs-5 fw-bold'>{% trans 'لطفا عکس کاتالوگ را آپلود کنید. (اختیاری)' %}</label>
+                    </br>
+                    {% render_field form.image_catalog|add_class:"form-control" %}
+                </p>
+            </div>
+
+            <div class='row mt-5'>
+                <div class='text-white'>
+                    <button type='submit' class='btn btn-dark'>{% trans "ثبت تغییرات" %}</button>
+                </div>
+            </div>
+        <form>
+    </div>
+{% endblock content %}
