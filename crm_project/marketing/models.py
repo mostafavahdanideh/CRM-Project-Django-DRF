@@ -37,12 +37,12 @@ class QuoteItem(models.Model):
 
 	price = models.PositiveIntegerField(
         default=0,
-        verbose_name=_("قیمت محصول")
+        verbose_name=_("قیمت کل")
     )
 
 	discount = models.FloatField(
         default=0.0,
-        verbose_name=_("تخفیف")
+        verbose_name=_("درصد تخفیف")
     )
 
 
