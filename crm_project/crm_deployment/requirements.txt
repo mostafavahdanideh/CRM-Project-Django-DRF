@@ -5,3 +5,4 @@ sqlparse==0.4.1
 psycopg2-binary
 django-jalali
 django-widget-tweaks
+weasyprint
