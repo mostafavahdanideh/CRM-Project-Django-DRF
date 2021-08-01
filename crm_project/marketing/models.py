@@ -1,7 +1,15 @@
 from django.db import models
+from django.core import validators
+from django.db.models.expressions import F
 from django.utils.translation import ugettext_lazy as _
 from django_jalali.db import models as jmodels
 from django.contrib.auth import get_user_model
+
+
+
+min_length_validator = validators.MinValueValidator(
+    limit_value=0, 
+    message=("discount can't be negative"))
 
 
 class Quote(models.Model):
@@ -18,31 +26,48 @@ class Quote(models.Model):
     def __str__(self):
         return self.owner.organization_name
     
+    def sum_all_base_cost(self):
+        return self.quoteitem_set.aggregate(models.Sum('base_cost')).get('base_cost__sum', 0)
+    
+    def sum_final_cost(self):
+        return self.quoteitem_set.aggregate(models.Sum('final_cost_with_discount')).get('final_cost_with_discount__sum', 0)
+
 
 class QuoteItem(models.Model):
 
-	quote = models.ForeignKey(
+    quote = models.ForeignKey(
         "Quote",
         on_delete=models.CASCADE)
 
-	product = models.ForeignKey(
+    product = models.ForeignKey(
         'inventory.CompanyProduct',
         on_delete=models.PROTECT
     )
 
-	quantity = models.PositiveIntegerField(
+    discount = models.FloatField(
+        default=0.0,
+        verbose_name=_("درصد تخفیف"),
+        validators=[min_length_validator]
+    )
+
+    quantity = models.PositiveIntegerField(
         default=1,
         verbose_name=_("تعداد خرید")
     )
 
-	price = models.PositiveIntegerField(
+    base_cost = models.PositiveIntegerField(
         default=0,
-        verbose_name=_("قیمت کل")
+        verbose_name=_("قیمت خام")
     )
 
-	discount = models.FloatField(
-        default=0.0,
-        verbose_name=_("درصد تخفیف")
+    cost_with_taxation = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("قیمت با مالیات")
+    )
+
+    final_cost_with_discount = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("قیمت نهایی با تخفیف")
     )
 
 
@@ -70,7 +95,3 @@ class FollowUp(models.Model):
         max_length=400,
         default=None
     )
-
-
-# class EmailHistory(models.Model):
-#     pass
