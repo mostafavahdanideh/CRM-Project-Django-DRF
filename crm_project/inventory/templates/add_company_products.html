@@ -3,6 +3,8 @@
 
 
 {% block content %}
+    {% include "navbar.html" %}
+    
     <div style="margin-left: 25%; margin-right: 25; margin-top: 5%;">
         <form method="post" enctype="multipart/form-data">
             {% csrf_token %}

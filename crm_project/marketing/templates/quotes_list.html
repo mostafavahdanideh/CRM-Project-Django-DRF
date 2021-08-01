@@ -1,7 +1,42 @@
 {% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
 
 
 {% block content %}
+    {% include "navbar.html" %}
+    
+    <div class='row mt-lg-5' style='margin-left: 15%; margin-right: 15%;'>
+        <table class='table table-dark'>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>{% trans "نام سازمان" %}</th>
+                    <th>{% trans "تاریخ ثبت" %}</th>
+                    <th>{% trans "خروجی پی دی اف" %}</th>
+                    <th>{% trans "عملیات" %}</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for quote in object_list %}
+                    <tr>
+                        <td class='fs-5 fw-bold'>{{forloop.counter}}</td>
+                        <td class='fs-5 fw-bold'>
+                            <a href="{% url 'marketing:detail_quote' pk=quote.pk %}" style='text-decoration: none; color:red;'>{{quote.owner}}</a>
+                        </td>
+                        <td class='fs-5 fw-bold'>{{quote.created_time|date:"Y-m-d , H:i:s"}}</td>
+                        <td class='fs-5 fw-bold'>
+                            <a href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود" %}</a>
+                        </td>
+                        <td class='fs-5 fw-bold'>
+                            <a href="#" style='text-decoration: none; color:red;'>{% trans "ارسال ایمیل به مخاطب" %}</a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
     {% include 'pagination.html' %}
 {% endblock content %}
 

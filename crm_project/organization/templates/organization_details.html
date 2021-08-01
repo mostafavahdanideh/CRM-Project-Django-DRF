@@ -3,7 +3,8 @@
 
 
 {% block content %}
-
+    {% include "navbar.html" %}
+    
     <div class='row'>
         <div class='row'>
             <div class='text-dark mt-lg-5 fw-bold fs-5'>
@@ -13,7 +14,7 @@
 
         <div style="display: inline;">
             <a class="btn btn-secondary" href="{% url 'organization:list' %}" role="button" style="width: 12%;">{% trans "بازگشت" %}</a>
-            <a class="btn btn-secondary" href="#" role="button" style="width: 20%;">{% trans "صدور پیش فاکتور" %}</a>
+            <a class="btn btn-secondary" href="{% url 'marketing:create_quote' %}" role="button" style="width: 20%;">{% trans "صدور پیش فاکتور" %}</a>
             <button id='edited-btn' class="btn btn-secondary" style="width: 20%;">{% trans "ویرایش اطلاعات سازمان و مخاطب" %}</button>
             <a class="btn btn-secondary" href="{% url 'marketing:follow_up_history' object.pk %}" role="button" style="width: 20%;">{% trans "تاریخچه پیگیری سفارشات سازمان" %}</a>
         </div>
