@@ -6,10 +6,14 @@ from django_jalali.db import models as jmodels
 from django.contrib.auth import get_user_model
 
 
-
 min_length_validator = validators.MinValueValidator(
     limit_value=0, 
     message=("discount can't be negative"))
+
+
+max_length_validator = validators.MaxValueValidator(
+    limit_value=100, 
+    message=("discount can't be more than 100"))
 
 
 class Quote(models.Model):
@@ -18,6 +22,13 @@ class Quote(models.Model):
         "organization.Organization",
         on_delete=models.PROTECT,
         verbose_name=_("سازمان"))
+    
+    creator = models.ForeignKey(
+        get_user_model(),
+        verbose_name=_("کارشناس ایجاد کننده"),
+        on_delete=models.PROTECT,
+        default=None
+    )
 
     created_time = jmodels.jDateTimeField(
         auto_now_add=True,
@@ -47,7 +58,10 @@ class QuoteItem(models.Model):
     discount = models.FloatField(
         default=0.0,
         verbose_name=_("درصد تخفیف"),
-        validators=[min_length_validator]
+        validators=[
+            min_length_validator, 
+            max_length_validator
+            ]
     )
 
     quantity = models.PositiveIntegerField(
