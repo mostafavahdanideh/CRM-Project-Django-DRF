@@ -16,6 +16,11 @@ class QuoteItemInline(admin.TabularInline):
     ]
 
 
+@admin.register(models.QuoteItem)
+class QuoteItemsAdminManagement(admin.ModelAdmin):
+    pass
+
+
 @admin.register(models.Quote)
 class QuoteAdminManagement(admin.ModelAdmin):
 
