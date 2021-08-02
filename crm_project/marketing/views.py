@@ -2,8 +2,9 @@ from django.contrib import messages
 from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.contrib.auth import mixins
+from django.core.mail import send_mail
 from django.views import generic
-from . import models, forms
+from . import models, forms, tasks
 from organization import models as org_models
 import weasyprint
 
@@ -82,5 +83,9 @@ class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
         content = response.rendered_content
         pdf = weasyprint.HTML(string=content, base_url='http://127.0.0.1:8000').write_pdf()
         pdf_response = HttpResponse(content=pdf, content_type='application/pdf')
-        # pdf_response['Content-Disposition'] = 'filename="quote_detail.pdf"'
         return pdf_response
+
+
+def send_quote_email(request):
+    tasks.send_email_task.delay()
+    return HttpResponse("Done!")
