@@ -38,6 +38,22 @@ class QuoteAdminManagement(admin.ModelAdmin):
         return obj.created_time.strftime("%Y/%m/%d  ,  %H:%M:%S")
 
 
-@admin.register(models.FollowUp)
+@admin.register(models.QuoteFollowUp)
 class FollowUpAdmin(admin.ModelAdmin):
     pass
+
+
+@admin.register(models.QuoteEmailHistory)
+class EmailHistoryAdmin(admin.ModelAdmin):
+
+    list_display = [
+        'pk',
+        'receiver_email_address',
+        'was_successfull',
+        'created_time',
+        'user_sender',
+    ]
+
+    ordering = [
+        '-created_time',
+    ]

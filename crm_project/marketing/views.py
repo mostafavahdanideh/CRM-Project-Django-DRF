@@ -1,17 +1,16 @@
 from django.contrib import messages
 from django.http.response import HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import mixins
-from django.core.mail import send_mail
 from django.views import generic
-from . import models, forms, tasks
-from organization import models as org_models
+from . import forms, tasks, models as marketing_models
+from organization import models as organization_models
 import weasyprint
 
 
 class OrganizationFollowUpHistory(generic.ListView):
     template_name = 'follow_up_history.html'
-    model = models.FollowUp
+    model = marketing_models.QuoteFollowUp
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -24,14 +23,14 @@ class OrganizationFollowUpHistory(generic.ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        organization_obj = get_object_or_404(klass=org_models.Organization, pk=self.kwargs.get('pk', None))
+        organization_obj = get_object_or_404(klass=organization_models.Organization, pk=self.kwargs.get('pk', None))
         context['organization'] = organization_obj
         return context
 
 
 class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'create_quotes.html'
-    model = models.QuoteItem
+    model = marketing_models.QuoteItem
     form_class = forms.AddQuoteItemsForm
 
     def form_invalid(self, form):
@@ -40,13 +39,13 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['organizations'] = org_models.Organization.objects.all()
+        context['organizations'] = organization_models.Organization.objects.all()
         return context
 
 
 class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):
     template_name = 'quotes_list.html'
-    model = models.Quote
+    model = marketing_models.Quote
     paginate_by = 3
 
     def get_queryset(self):
@@ -60,7 +59,7 @@ class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):
 
 class DetailQuotes(mixins.LoginRequiredMixin, generic.DetailView):
     template_name = 'detail_quote.html'
-    model = models.Quote
+    model = marketing_models.Quote
 
     def quotes_for_user_exists(self):
         qs =  self.get_queryset()
@@ -76,7 +75,7 @@ class DetailQuotes(mixins.LoginRequiredMixin, generic.DetailView):
 
 class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
     template_name = 'generate_quote_pdf.html'
-    model = models.Quote
+    model = marketing_models.Quote
 
     def get(self, request, *args, **kwargs):
         response = super().get(request, *args, **kwargs)
@@ -86,6 +85,8 @@ class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
         return pdf_response
 
 
-def send_quote_email(request):
-    tasks.send_email_task.delay()
-    return HttpResponse("Done!")
+def send_quote_email(request, pk):
+    user_pk = request.user.pk
+    tasks.send_email_task.delay(pk, user_pk)
+
+    return HttpResponse("<h2 class='fs-5 fw-bold' style='text-align:center; margin-top: 20%;'>درخواست شما ارسال شد</h2>")

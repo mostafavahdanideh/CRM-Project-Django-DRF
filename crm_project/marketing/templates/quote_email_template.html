@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block style %}
+     .button {
+        background-color: #4CAF50;
+        border: none;
+        color: black;
+        padding: 15px 32px;
+        font-size: 16px;
+    }
+{% endblock style %}
+
+
+{% block content %}
+
+    <div style='text-align: right'>
+        <h2 style='color: red;'>.{{message}}</h2>
+        <button class="button">
+            <a href="http://127.0.0.1:8000/marketing/download-quote/{{quote_pk}}">دانلود فاکتور</a>
+        </button>
+    </div>
+
+{% endblock content %}

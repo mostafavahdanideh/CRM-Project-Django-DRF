@@ -40,7 +40,7 @@
                             <a href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود" %}</a>
                         </td>
                         <td class='fs-5 fw-bold'>
-                            <a href="{% url 'marketing:quote-to-email' %}" style='text-decoration: none; color:red;'>{% trans "ارسال ایمیل به مخاطب" %}</a>
+                            <a href="{% url 'marketing:quote-to-email' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "ارسال ایمیل به مخاطب" %}</a>
                         </td>
                     </tr>
                 {% endfor %}
