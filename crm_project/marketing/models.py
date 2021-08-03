@@ -85,7 +85,7 @@ class QuoteItem(models.Model):
     )
 
 
-class FollowUp(models.Model):
+class QuoteFollowUp(models.Model):
 
     organization = models.ForeignKey(
         'organization.Organization',
@@ -109,3 +109,29 @@ class FollowUp(models.Model):
         max_length=400,
         default=None
     )
+
+
+class QuoteEmailHistory(models.Model):
+
+    receiver_email_address = models.EmailField(
+        verbose_name=_("ایمیل گیرنده")
+    )
+
+    was_successfull = models.BooleanField(
+        default=False,
+        verbose_name=_("ایمیل ارسال شد؟")
+    )
+
+    created_time = jmodels.jDateTimeField(
+        auto_now_add=True,
+        verbose_name=_("تاریخ ارسال شده")
+    )
+
+    user_sender = models.ForeignKey(
+        get_user_model(),
+        on_delete=models.PROTECT,
+        verbose_name=_("کاربر ارسال کننده")
+    )
+
+    def __str__(self):
+        return self.receiver_email_address
