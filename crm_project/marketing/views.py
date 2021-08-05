@@ -1,10 +1,12 @@
 from django.contrib import messages
-from django.http.response import HttpResponse
+from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import mixins
 from django.views import generic
+from django.db import transaction
 from . import forms, tasks, models as marketing_models
 from organization import models as organization_models
+from inventory import models as inventory_models
 import weasyprint
 
 
@@ -31,16 +33,53 @@ class OrganizationFollowUpHistory(generic.ListView):
 class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'create_quotes.html'
     model = marketing_models.QuoteItem
-    form_class = forms.AddQuoteItemsForm
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        
+        if self.request.user.is_superuser:
+            context['organizations'] = organization_models.Organization.objects.all()
+        else:
+            context['organizations'] = organization_models.Organization.objects.filter(expert_creator=self.request.user)
+
+        if self.request.POST:
+            context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
+        else:
+            context['forms_set'] = forms.AddQuoteItemsFormSet()
+
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        forms_set = context['forms_set']
+
+        organization = organization_models.Organization.objects.get(pk=request.POST.get("organization_pk", None))
+        quote = marketing_models.Quote.objects.create(owner=organization, creator=request.user)
+
+        if forms_set.is_valid():
+            try:
+                for form in forms_set:
+                    form.instance.quote = quote
+
+                    base_cost = form.instance.product.price * form.instance.quantity
+                    cost_with_taxation = ((base_cost * 9) / 100) + base_cost
+                    discount_amount = (cost_with_taxation * form.instance.discount) / 100
+                    final_cost_with_discount = cost_with_taxation - discount_amount
+
+                    form.instance.base_cost = base_cost
+                    form.instance.cost_with_taxation = cost_with_taxation
+                    form.instance.final_cost_with_discount = final_cost_with_discount
+
+                    form.save()
+            except:
+                return self.form_invalid()
+        else:
+            return self.form_invalid()
+        return HttpResponse("<h1>ok</h1>")
 
     def form_invalid(self, form):
         messages.info(self.request, form.errors)
         return super().form_invalid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['organizations'] = organization_models.Organization.objects.all()
-        return context
 
 
 class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):
@@ -85,8 +124,24 @@ class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
         return pdf_response
 
 
-def send_quote_email(request, pk):
-    user_pk = request.user.pk
-    tasks.send_email_task.delay(pk, user_pk)
+def send_quote_email(request):
+    organization_pk = request.GET.get('pk', None)
 
-    return HttpResponse("<h2 class='fs-5 fw-bold' style='text-align:center; margin-top: 20%;'>درخواست شما ارسال شد</h2>")
+    if organization_pk:
+        if organization_pk.isdigit():
+            user_pk = request.user.pk
+            tasks.send_email_task.delay(organization_pk, user_pk)
+
+            return JsonResponse(
+                data={
+                    'message': "درخواست شما ارسال شد"
+                },
+                status=200
+            )
+    
+    return JsonResponse(
+            data={
+                'message': "ارسال درخواست شما با مشکل مواجه شد لطفا دوباره ایمیل را ارسال کنید"
+            },
+            status=422
+        )

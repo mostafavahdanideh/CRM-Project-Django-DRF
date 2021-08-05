@@ -37,10 +37,10 @@
                             {% endif %}
                         </td>
                         <td class='fs-5 fw-bold'>
-                            <a href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود" %}</a>
+                            <a type="btn" class="btn btn-success text-white" href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود" %}</a>
                         </td>
                         <td class='fs-5 fw-bold'>
-                            <a href="{% url 'marketing:quote-to-email' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "ارسال ایمیل به مخاطب" %}</a>
+                            <button class='btn btn-success text-white' id='send-btn' data-pk={{quote.pk}}>{% trans "ارسال ایمیل به مخاطب" %}</button>
                         </td>
                     </tr>
                 {% endfor %}
@@ -49,3 +49,32 @@
     </div>
     {% include 'pagination.html' %}
 {% endblock content %}
+
+{% block scripts %}
+    <script>
+        $(document).ready(
+            function() {
+                var send_button = $("[id=send-btn]");
+
+                send_button.click(
+                    function(event) {
+                        var pk = event.currentTarget.dataset['pk'];
+
+                        $.ajax(
+                            {
+                                url: "{% url 'marketing:quote-to-email' %}" + "?pk=" + pk,
+                                method: 'GET',
+                                success: function(response) {
+                                    alert(response['message']);
+                                },
+                                error: function(errors) {
+                                    alert(errors['message']);
+                                }
+                            }
+                        );
+                    }
+                );
+            }
+        );
+    </script>
+{% endblock scripts %}

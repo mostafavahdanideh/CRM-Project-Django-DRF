@@ -6,18 +6,21 @@
 {% block content %}
     {% include "navbar.html" %}
     
-    <div class='row' style='margin-left: 20%; margin-right: 20%; margin-top: 10%;'>
+    <div class='row' style='margin-left: 20%; margin-right: 20%; margin-top: 5%;'>
         <div class='row'>
-            <h2 class='text-dark fs-1 fw-bold mb-5' style='text-align: right;'>{% trans "ثبت پیش فاکتور" %}<h2>
+            <h2 class='text-dark fs-1 fw-bold' style='text-align: right;'>{% trans "ثبت پیش فاکتور" %}<h2>
         </div>
+
         <form method='post'>
             {% csrf_token %}
+            {{ forms_set.management_form }}
+
             <div class='row mt-3'>
                 <label for="id_organization" class="form-label fs-5 fw-bold">{% trans 'انتخاب سازمان' %}</label>
-                <select id='id_organization' name='organization_name' class="form-select">
+                <select id='id_organization' name='organization_pk' class="form-select">
                     <option selected>---------</option>
                     {% for organization in organizations %}
-                        <option value="{{organizations.pk}}">{{organization.organization_name}}</option>
+                        <option value="{{organization.pk}}" class='select-options'>{{organization.organization_name}}</option>
                     {% endfor %}
                 </select>
             </div>
@@ -29,32 +32,34 @@
                             <th>{% trans "انتخاب محصول" %}</th>
                             <th>{% trans "تعداد خرید" %}</th>
                             <th>{% trans "درصد تخفیف" %}</th>
+                            <th>{% trans "حذف آیتم" %}</th>
                         </tr>
                     </thead>
 
                     <tbody>
-                        <tr>
-                            <td>
-                                {% render_field form.product|add_class:'form-control' %}
-                            </td>
-                            <td>
-                                {% render_field form.quantity|add_class:'form-control'|attr:'min:1' %}
-                            </td>
-                            <td>
-                                {% render_field form.discount|add_class:'form-control'|attr:'min:0' %}
-                            </td>
-                        </tr>
-                        <tr class='add-row'>
-                            <td colspan='4'>
-                                <a href="#"class='text-white' onclick="addRowToTable()">{% trans "آیتم جدید به پیش فاکتور اضافه کن" %}</a>
-                            </td>
-                        </tr>
+                        {% for quote_item_form in forms_set %}
+                            <tr class='tr-for-clone'>
+                                <td>
+                                    {% render_field quote_item_form.product|add_class:'form-control' %}
+                                </td>
+                                <td>
+                                    {% render_field quote_item_form.quantity|add_class:'form-control'|attr:'min:1' %}
+                                </td>
+                                <td>
+                                    {% render_field quote_item_form.discount|add_class:'form-control'|attr:'min:0'|attr:'max:100' %}
+                                </td>
+                                <td></td>
+                            </tr>
+                        {% endfor %}
                     </tbody>
                 </table>
             </div>
-            <div class='row mt-3'>
+            <div>
+                <input type="button" class='btn btn-dark text-white' value="Add another Item" id="add_more">
+            </div>
+            <div class='row'>
                 <div>
-                    <button type='submit' class='btn btn-dark text-white'>{% trans "ذخیره" %}</button>
+                    <button type="submit" class='btn btn-dark text-white'>{% trans "ذخیره" %}</button>
                 </div>
             </div>
         </form>
@@ -64,6 +69,36 @@
 
 {% block scripts %}
     <script>
+        $(document).ready(
+                function() {
+                    $("[id=add_more]").click(
+                        function() {
+                            cloneMore('.tr-for-clone', 'form');
+                        }
+                    );
 
+                    function cloneMore(selector, type) {
+                        var newElements = $(selector);
+                        var newElement = $(newElements[newElements.length - 1]).clone(true);
+                        var total = $('#id_' + type + '-TOTAL_FORMS').val();
+
+                        newElement.find(':input').each(function() {
+                            var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+                            var id = 'id_' + name;
+                            $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                        });
+
+                        newElement.find('label').each(function() {
+                            var newFor = $(this).attr('for').replace('-' + (total-1) + '-','-' + total + '-');
+                            $(this).attr('for', newFor);
+                        });
+                        
+                        total++;
+
+                        $('#id_' + type + '-TOTAL_FORMS').val(total);
+                        $(selector).after(newElement);
+                    }
+            }
+        );
     </script>
 {% endblock scripts %}

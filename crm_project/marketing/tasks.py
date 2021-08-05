@@ -2,8 +2,6 @@ from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from celery import shared_task
 from django.shortcuts import get_object_or_404
-import marketing
-from organization import models as organization_models
 from django.conf import settings
 from marketing import models as marketing_models
 from django.template import loader
@@ -15,9 +13,9 @@ def send_email_task(quote_pk, user_pk):
     quote_obj = get_object_or_404(klass=marketing_models.Quote, pk=quote_pk)
     user_obj = get_object_or_404(klass=get_user_model(), pk=user_pk)
     email_from = settings.EMAIL_HOST_USER
+    email_to = quote_obj.owner.owner_email
     subject = 'پیش فاکتور'
     normal_message_content = "پیش فاکتور شما ثبت شد"
-    email_to = quote_obj.owner.owner_email
     
     html_message_content = loader.render_to_string(
             template_name="quote_email_template.html",

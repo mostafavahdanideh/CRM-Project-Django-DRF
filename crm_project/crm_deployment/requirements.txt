@@ -7,3 +7,5 @@ django-jalali
 django-widget-tweaks
 weasyprint
 celery
+redis
+celery[redis]
