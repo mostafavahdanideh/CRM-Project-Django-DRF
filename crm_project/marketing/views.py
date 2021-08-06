@@ -45,7 +45,7 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
         if self.request.POST:
             context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
         else:
-            context['forms_set'] = forms.AddQuoteItemsFormSet()
+            context['forms_set'] = forms.AddQuoteItemsFormSet(queryset=marketing_models.QuoteItem.objects.none())
 
         return context
     
@@ -53,11 +53,11 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
         context = self.get_context_data()
         forms_set = context['forms_set']
 
-        organization = organization_models.Organization.objects.get(pk=request.POST.get("organization_pk", None))
-        quote = marketing_models.Quote.objects.create(owner=organization, creator=request.user)
-
         if forms_set.is_valid():
             try:
+                organization = organization_models.Organization.objects.get(pk=request.POST.get("organization_pk", None))
+                quote = marketing_models.Quote.objects.create(owner=organization, creator=request.user)
+
                 for form in forms_set:
                     form.instance.quote = quote
 
@@ -72,14 +72,11 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
 
                     form.save()
             except:
-                return self.form_invalid()
+                return HttpResponse("<h1>FIELD ERROR</h1>")
         else:
-            return self.form_invalid()
-        return HttpResponse("<h1>ok</h1>")
+            return HttpResponse("<h1>INVALID</h1>")
 
-    def form_invalid(self, form):
-        messages.info(self.request, form.errors)
-        return super().form_invalid(form)
+        return HttpResponse("<h1>OK</h1>")
 
 
 class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):
