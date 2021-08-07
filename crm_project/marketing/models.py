@@ -38,10 +38,12 @@ class Quote(models.Model):
         return self.owner.organization_name
     
     def sum_all_base_cost(self):
-        return self.quoteitem_set.aggregate(models.Sum('base_cost')).get('base_cost__sum', 0)
+        return self.quoteitem_set.aggregate(
+            models.Sum('base_cost')).get('base_cost__sum', 0)
     
     def sum_final_cost(self):
-        return self.quoteitem_set.aggregate(models.Sum('final_cost_with_discount')).get('final_cost_with_discount__sum', 0)
+        return self.quoteitem_set.aggregate(
+            models.Sum('final_cost_with_discount')).get('final_cost_with_discount__sum', 0)
 
 
 class QuoteItem(models.Model):
@@ -84,6 +86,18 @@ class QuoteItem(models.Model):
         verbose_name=_("قیمت نهایی با تخفیف")
     )
 
+    def calculating_base_cost(self):
+        return self.product.price * self.quantity
+    
+    def calculating_cost_with_taxation(self, base_cost):
+        return ((base_cost * 9) / 100) + base_cost
+    
+    def calculating_discount_amount(self, cost_with_taxation):
+        return (cost_with_taxation * self.discount) / 100
+    
+    def calculating_final_cost_with_discount(self, cost_with_taxation, discount_amount):
+        return cost_with_taxation - discount_amount
+
 
 class QuoteFollowUp(models.Model):
 
@@ -109,6 +123,9 @@ class QuoteFollowUp(models.Model):
         max_length=400,
         default=None
     )
+
+    def __str__(self):
+        return self.organization.organization_name
 
 
 class QuoteEmailHistory(models.Model):

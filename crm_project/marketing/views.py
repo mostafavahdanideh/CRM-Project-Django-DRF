@@ -3,31 +3,60 @@ from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import mixins
 from django.views import generic
-from django.db import transaction
 from . import forms, tasks, models as marketing_models
 from organization import models as organization_models
-from inventory import models as inventory_models
 import weasyprint
 
 
-class OrganizationFollowUpHistory(generic.ListView):
+class ListOrganizationFollowUpHistory(generic.ListView):
     template_name = 'follow_up_history.html'
     model = marketing_models.QuoteFollowUp
+    paginate_by = 3
 
     def get_queryset(self):
         qs = super().get_queryset()
-
-        if not self.request.user.is_superuser:
-            pk = self.kwargs.get('pk', None)
-            qs = qs.filter(expert_creator=self.request.user, pk=pk)
+        pk = self.kwargs.get('pk', None)
+        qs = qs.filter(organization__pk=pk)
 
         return qs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        organization_obj = get_object_or_404(klass=organization_models.Organization, pk=self.kwargs.get('pk', None))
+
+        organization_obj = get_object_or_404(
+            klass=organization_models.Organization, 
+            pk=self.kwargs.get('pk', None))
+
         context['organization'] = organization_obj
+
         return context
+
+
+class CreateOrganizationFollowUp(generic.CreateView):
+    template_name = 'create_follow_up.html'
+    model = marketing_models.QuoteFollowUp
+    form_class = forms.CreateFollowUp
+
+    def form_valid(self, form):
+        form.instance.expert_creator = self.request.user
+
+        form.instance.organization = get_object_or_404(
+            klass=organization_models.Organization, 
+            pk=self.kwargs.get('pk', None))
+
+        form.save()
+
+        return JsonResponse(
+            data={
+                'message': "your data successfully saved"
+            }, status=200
+        )
+    
+    def form_invalid(self, form):
+        return JsonResponse(
+            data={
+                "errors": form.errors
+            }, status=400)
 
 
 class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
@@ -36,16 +65,20 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
 
     def get_context_data(self, **kwargs):
         context = {}
-        
-        if self.request.user.is_superuser:
-            context['organizations'] = organization_models.Organization.objects.all()
-        else:
-            context['organizations'] = organization_models.Organization.objects.filter(expert_creator=self.request.user)
 
-        if self.request.POST:
+        if self.request.method == "GET":
+
+            if self.request.user.is_superuser:
+                context['organizations'] = organization_models.Organization.objects.all()
+            else:
+                context['organizations'] = organization_models.Organization.objects.filter(
+                    expert_creator=self.request.user)
+
+            context['forms_set'] = forms.AddQuoteItemsFormSet(
+                queryset=marketing_models.QuoteItem.objects.none())
+
+        elif self.request.method == "POST":
             context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
-        else:
-            context['forms_set'] = forms.AddQuoteItemsFormSet(queryset=marketing_models.QuoteItem.objects.none())
 
         return context
     
@@ -55,28 +88,55 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
 
         if forms_set.is_valid():
             try:
-                organization = organization_models.Organization.objects.get(pk=request.POST.get("organization_pk", None))
-                quote = marketing_models.Quote.objects.create(owner=organization, creator=request.user)
+                organization = organization_models.Organization.objects.get(
+                    pk=request.POST.get("organization_pk", None))
+
+                quote = marketing_models.Quote.objects.create(
+                    owner=organization, 
+                    creator=request.user)
 
                 for form in forms_set:
-                    form.instance.quote = quote
+                    quoteitems_obj = form.instance
 
-                    base_cost = form.instance.product.price * form.instance.quantity
-                    cost_with_taxation = ((base_cost * 9) / 100) + base_cost
-                    discount_amount = (cost_with_taxation * form.instance.discount) / 100
-                    final_cost_with_discount = cost_with_taxation - discount_amount
-
-                    form.instance.base_cost = base_cost
-                    form.instance.cost_with_taxation = cost_with_taxation
-                    form.instance.final_cost_with_discount = final_cost_with_discount
+                    quoteitems_obj.quote = quote
+                    quoteitems_obj.base_cost = quoteitems_obj.calculating_base_cost()
+                    quoteitems_obj.cost_with_taxation = quoteitems_obj.calculating_cost_with_taxation(quoteitems_obj.base_cost)
+                    discount_amount = quoteitems_obj.calculating_discount_amount(quoteitems_obj.cost_with_taxation)
+                    quoteitems_obj.final_cost_with_discount = quoteitems_obj.calculating_final_cost_with_discount(
+                        quoteitems_obj.cost_with_taxation, discount_amount)
 
                     form.save()
             except:
-                return HttpResponse("<h1>FIELD ERROR</h1>")
+                messages.info(request, forms_set.errors)
         else:
-            return HttpResponse("<h1>INVALID</h1>")
+            messages.info(request, forms_set.errors)
 
-        return HttpResponse("<h1>OK</h1>")
+        return redirect("marketing:create_quote")
+
+
+class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):
+    template_name = 'edit_quotes.html'
+    model = marketing_models.Quote
+
+    def get_context_data(self, **kwargs):
+        context = {}
+
+        if self.request.method == "GET":
+
+            if self.request.user.is_superuser:
+                context['organizations'] = organization_models.Organization.objects.all()
+            else:
+                context['organizations'] = organization_models.Organization.objects.filter(
+                    expert_creator=self.request.user)
+
+            context['forms_set'] = forms.AddQuoteItemsFormSet(
+                queryset=marketing_models.QuoteItem.objects.filter(
+                    quote__pk=self.kwargs.get('pk', None)))
+
+        elif self.request.method == "POST":
+            context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
+
+        return context
 
 
 class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):
@@ -99,7 +159,11 @@ class DetailQuotes(mixins.LoginRequiredMixin, generic.DetailView):
 
     def quotes_for_user_exists(self):
         qs =  self.get_queryset()
-        exists = qs.filter(owner__expert_creator=self.request.user).filter(pk=self.kwargs.get('pk', None)).exists()
+
+        exists = qs.filter(
+            owner__expert_creator=self.request.user).filter(
+                pk=self.kwargs.get('pk', None)).exists()
+
         return exists
 
     def get(self, request, *args, **kwargs):

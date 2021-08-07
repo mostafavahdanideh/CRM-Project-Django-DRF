@@ -17,16 +17,16 @@
                 </tr>
             <thead>
             <tbody>
-                {% for item in object_list %}
+                {% for organization in object_list %}
                     <tr>
                         <td>{{forloop.counter}}</td>
                         <td>
-                            <a style='text-decoration: none; color: red;' href="{% url 'organization:detail' item.pk %}">{{item.organization_name}}</a>
+                            <a style='text-decoration: none; color: red;' href="{% url 'organization:detail' organization.pk %}">{{organization.organization_name}}</a>
                         </td>
-                        <td>{{item.owner_first_name}} {{item.owner_last_name}} {{item.owner_second_last_name}}</td>
-                        <td>{{item.expert_creator}}</td>
+                        <td>{{organization.owner_first_name}} {{organization.owner_last_name}} {{organizationowner_second_last_name}}</td>
+                        <td>{{organization.expert_creator}}</td>
                         <td>
-                            <a href="#" style='text-decoration: none; color: red;'>{% trans "ثبت پیگیری" %}</a>
+                            <a href="{% url 'marketing:create_follow_up' organization.pk %}" style='text-decoration: none; color: red;'>{% trans "ثبت پیگیری" %}</a>
                         </td>
                     </tr>
                 {% endfor %}

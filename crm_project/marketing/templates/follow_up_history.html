@@ -1,11 +1,12 @@
 {% extends 'base.html' %}
 {% load i18n %}
+{% load humanize %}
 
 
 {% block content %}
     {% include "navbar.html" %}
     
-    <div class='row'>
+    <div class='row ms-3'>
         <div class='row'>
             <div class='text-dark mt-lg-5 fw-bold fs-5'>
                 <h2>{{organization.organization_name}} {% trans "تاریخچه پیگیری شرکت" %}</h2>
@@ -17,19 +18,19 @@
                 <thead>
                     <tr>
                         <th>#</th>
-                        <th>{% trans "کاربر" %}</th>
-                        <th>{% trans "تاریخ" %}</th>
-                        <th>{% trans "سفارش" %}</th>
+                        <th>{% trans "کاربر ثبت کننده" %}</th>
+                        <th>{% trans "تاریخ ثبت" %}</th>
+                        <th>{% trans "متن پیگیری" %}</th>
                     </tr>
                 </thead>
 
                 <tbody>
-                    {% for item in object_list  %}
+                    {% for follow_up in object_list  %}
                         <tr>
                             <td>{{forloop.counter}}</td>
-                            <td>{{item.expert_creator}}</td>
-                            <td>{{item.created_time}}</td>
-                            <td>{{item.content}}</td>
+                            <td>{{follow_up.expert_creator}}</td>
+                            <td>{{follow_up.created_time|date:"Y-m-d , H:i:s"}}</td>
+                            <td>{{follow_up.content}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>

@@ -5,8 +5,14 @@
 
 {% block content %}
     {% include "navbar.html" %}
+
+    <div class='mt-lg-5 ms-2 mb-3'>
+        <button class='btn btn-dark'>
+            <a href="{% url 'marketing:update_quote' object.pk%}" style='text-decoration: none; color: white;'>{% trans "ویرایش" %}</a>
+        </button>
+    </div>
     
-    <div class='row mt-lg-5' style='margin-left: 15%; margin-right: 15%;'>
+    <div class='row ms-2 me-2'>
         <table class='table table-dark'>
             <thead>
                 <tr>
@@ -45,6 +51,5 @@
             </tbody>
         </table>
     </div>
-    {% include 'pagination.html' %}
 {% endblock content %}
 
