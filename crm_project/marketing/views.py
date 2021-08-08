@@ -1,9 +1,9 @@
-from django.contrib import messages
 from django.http.response import HttpResponse, JsonResponse
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
 from django.contrib.auth import mixins
 from django.views import generic
-from . import forms, tasks, models as marketing_models
+from . import my_statics, forms, tasks, models as marketing_models
 from organization import models as organization_models
 import weasyprint
 
@@ -63,22 +63,100 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'create_quotes.html'
     model = marketing_models.QuoteItem
 
+    def get_all_organizations(self):
+        return organization_models.Organization.objects.all()
+    
+    def get_expert_creator_organizations(self):
+        return organization_models.Organization.objects.filter(expert_creator=self.request.user)
+    
+    def get_none_quoteitems(self):
+        return marketing_models.QuoteItem.objects.none()
+    
+    def get_organization_pk(self):
+        return self.request.POST.get("organization_pk", None)
+
+    def get_organization_obj(self):
+        organization_pk = self.get_organization_pk()
+        return organization_models.Organization.objects.get(pk=organization_pk)
+    
+    def create_quote(self):
+        organization_obj = self.get_organization_obj()
+        return marketing_models.Quote.objects.create(owner=organization_obj, creator=self.request.user)
+    
+    def get(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['forms_set'] = forms.AddQuoteItemsFormSet(queryset=self.get_none_quoteitems())
+        return super().render_to_response(context)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+
+        if self.request.user.is_superuser:
+            context['organizations'] = self.get_all_organizations()
+        else:
+            context['organizations'] = self.get_expert_creator_organizations()
+
+        return context
+    
+    def post(self, request, *args, **kwargs):
+        context = self.get_context_data()
+        context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
+        forms_set = context['forms_set']
+
+        if forms_set.has_changed() and forms_set.is_valid():
+            for form in forms_set:
+                organization_pk = self.get_organization_pk()
+
+                if organization_pk and organization_pk.isdigit():
+                    my_statics.save_calculation_related_with_quoteitems_model_fields(
+                        form, 
+                        self.create_quote())
+                else:
+                    forms_set.errors.append({'organization': "organization field is required"})
+                    return render(request, template_name='create_quotes.html', context=context)
+        else:
+            forms_set.errors.insert(0, {'form': "form is empty"})
+            return render(request, template_name='create_quotes.html', context=context)
+
+        return redirect("marketing:list_quotes")
+
+
+class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):
+    template_name = 'edit_quotes.html'
+    pk_url_kwarg = 'quote_pk'
+    model = marketing_models.QuoteItem
+    quote_pk = None
+    organization_pk = None
+
+    def get_queryset(self):
+        return marketing_models.Quote.objects.all()
+    
+    def get_organization(self):
+        self.organization_pk = self.kwargs.get('organization_pk', None)
+        return organization_models.Organization.objects.filter(pk=self.organization_pk)
+    
+    def get_items_in_quote(self):
+        self.quote_pk = self.kwargs.get('quote_pk', None)
+        return marketing_models.QuoteItem.objects.filter(quote__pk=self.quote_pk)
+    
+    def get_quote(self):
+        return marketing_models.Quote.objects.get(pk=self.quote_pk)
+    
+    def get_successfull_redirect_url(self):
+        return reverse("marketing:detail_quote", kwargs={"pk":self.quote_pk})
+    
+    def item_exists_in_quote(self, pk):
+        items_in_quote = self.get_items_in_quote()
+        return items_in_quote.filter(pk=pk).exists()
+
     def get_context_data(self, **kwargs):
         context = {}
 
         if self.request.method == "GET":
-
-            if self.request.user.is_superuser:
-                context['organizations'] = organization_models.Organization.objects.all()
-            else:
-                context['organizations'] = organization_models.Organization.objects.filter(
-                    expert_creator=self.request.user)
-
-            context['forms_set'] = forms.AddQuoteItemsFormSet(
-                queryset=marketing_models.QuoteItem.objects.none())
+            context['forms_set'] = forms.UpdateQuoteItemsFormSet(queryset=self.get_items_in_quote())
 
         elif self.request.method == "POST":
-            context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
+            context['forms_set'] = forms.UpdateQuoteItemsFormSet(data=self.request.POST)
 
         return context
     
@@ -87,56 +165,17 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
         forms_set = context['forms_set']
 
         if forms_set.is_valid():
-            try:
-                organization = organization_models.Organization.objects.get(
-                    pk=request.POST.get("organization_pk", None))
-
-                quote = marketing_models.Quote.objects.create(
-                    owner=organization, 
-                    creator=request.user)
-
-                for form in forms_set:
-                    quoteitems_obj = form.instance
-
-                    quoteitems_obj.quote = quote
-                    quoteitems_obj.base_cost = quoteitems_obj.calculating_base_cost()
-                    quoteitems_obj.cost_with_taxation = quoteitems_obj.calculating_cost_with_taxation(quoteitems_obj.base_cost)
-                    discount_amount = quoteitems_obj.calculating_discount_amount(quoteitems_obj.cost_with_taxation)
-                    quoteitems_obj.final_cost_with_discount = quoteitems_obj.calculating_final_cost_with_discount(
-                        quoteitems_obj.cost_with_taxation, discount_amount)
-
-                    form.save()
-            except:
-                messages.info(request, forms_set.errors)
+            for form in forms_set:
+                if form.has_changed():
+                    if self.item_exists_in_quote(form.instance.pk):
+                        my_statics.save_calculation_related_with_quoteitems_model_fields(form)
+                    else:
+                        quote = self.get_quote()
+                        my_statics.save_calculation_related_with_quoteitems_model_fields(form, quote)
         else:
-            messages.info(request, forms_set.errors)
-
-        return redirect("marketing:create_quote")
-
-
-class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):
-    template_name = 'edit_quotes.html'
-    model = marketing_models.Quote
-
-    def get_context_data(self, **kwargs):
-        context = {}
-
-        if self.request.method == "GET":
-
-            if self.request.user.is_superuser:
-                context['organizations'] = organization_models.Organization.objects.all()
-            else:
-                context['organizations'] = organization_models.Organization.objects.filter(
-                    expert_creator=self.request.user)
-
-            context['forms_set'] = forms.AddQuoteItemsFormSet(
-                queryset=marketing_models.QuoteItem.objects.filter(
-                    quote__pk=self.kwargs.get('pk', None)))
-
-        elif self.request.method == "POST":
-            context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
-
-        return context
+            return render(request, template_name='edit_quotes.html', context=context)
+        
+        return redirect(self.get_successfull_redirect_url())
 
 
 class ListQuotes(mixins.LoginRequiredMixin, generic.ListView):

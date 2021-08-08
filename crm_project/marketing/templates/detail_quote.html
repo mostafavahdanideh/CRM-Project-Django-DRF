@@ -8,7 +8,7 @@
 
     <div class='mt-lg-5 ms-2 mb-3'>
         <button class='btn btn-dark'>
-            <a href="{% url 'marketing:update_quote' object.pk%}" style='text-decoration: none; color: white;'>{% trans "ویرایش" %}</a>
+            <a href="{% url 'marketing:update_quote' quote_pk=object.pk organization_pk=object.owner.pk%}" style='text-decoration: none; color: white;'>{% trans "ویرایش" %}</a>
         </button>
     </div>
     

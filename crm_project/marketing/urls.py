@@ -13,5 +13,5 @@ urlpatterns = [
     path('send-quote-to-email/', views.send_quote_email, name='quote-to-email'),
     path('follow-up-history-list/<int:pk>/', views.ListOrganizationFollowUpHistory.as_view(), name='follow_up_history_list'),
     path('create-follow-up/<int:pk>/', views.CreateOrganizationFollowUp.as_view(), name='create_follow_up'),
-    path('update-quote/<int:pk>/', views.EditQuotes.as_view(), name='update_quote')
+    path('update-quote/<int:quote_pk>/<int:organization_pk>/', views.EditQuotes.as_view(), name='update_quote')
 ]

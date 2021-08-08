@@ -13,6 +13,16 @@ AddQuoteItemsFormSet = modelformset_factory(
     extra=1
     )
 
+UpdateQuoteItemsFormSet = modelformset_factory(
+    models.QuoteItem,
+    fields = [
+            'product',
+            'quantity',
+            'discount',
+        ],
+    extra=0
+    )
+
 
 class CreateFollowUp(forms.ModelForm):
     class Meta:

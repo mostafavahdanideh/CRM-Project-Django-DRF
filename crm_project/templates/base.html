@@ -38,10 +38,18 @@
                             </svg>
                             <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
                             <div>
-                                {% if messages %}
-                                    {% for message in messages %}
-                                        <strong>{{message}}</strong>
+                                {% if forms_set.errors %}
+                                    {% for dict_errors in forms_set.errors %}
+                                        {% for key_error, value_error in dict_errors.items %}
+                                            <strong>{{key_error}} : {{value_error}}</strong> <br>
+                                        {% endfor %}
                                     {% endfor %}
+                                {% else %}
+                                    {% if messages %}
+                                        {% for message in messages %}
+                                            <strong>{{message}}</strong>
+                                        {% endfor %}
+                                    {% endif %}
                                 {% endif %}
                             </div>
                             <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
