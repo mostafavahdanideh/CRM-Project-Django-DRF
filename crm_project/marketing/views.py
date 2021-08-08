@@ -85,7 +85,7 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
     
     def get(self, request, *args, **kwargs):
         context = self.get_context_data()
-        context['forms_set'] = forms.AddQuoteItemsFormSet(queryset=self.get_none_quoteitems())
+        context['forms_set'] = forms.QuoteItemsFormSet(queryset=self.get_none_quoteitems())
         return super().render_to_response(context)
 
     def get_context_data(self, **kwargs):
@@ -100,7 +100,7 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
     
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
-        context['forms_set'] = forms.AddQuoteItemsFormSet(data=self.request.POST)
+        context['forms_set'] = forms.QuoteItemsFormSet(data=self.request.POST)
         forms_set = context['forms_set']
 
         if forms_set.has_changed() and forms_set.is_valid():
@@ -143,7 +143,7 @@ class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):
         return marketing_models.Quote.objects.get(pk=self.quote_pk)
     
     def get_successfull_redirect_url(self):
-        return reverse("marketing:detail_quote", kwargs={"pk":self.quote_pk})
+        return reverse("marketing:detail_quote", kwargs={"pk":self.kwargs.get('quote_pk', None)})
     
     def item_exists_in_quote(self, pk):
         items_in_quote = self.get_items_in_quote()
@@ -153,20 +153,26 @@ class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):
         context = {}
 
         if self.request.method == "GET":
-            context['forms_set'] = forms.UpdateQuoteItemsFormSet(queryset=self.get_items_in_quote())
+            context['forms_set'] = forms.QuoteItemsFormSet(queryset=self.get_items_in_quote())
 
         elif self.request.method == "POST":
-            context['forms_set'] = forms.UpdateQuoteItemsFormSet(data=self.request.POST)
+            context['forms_set'] = forms.QuoteItemsFormSet(data=self.request.POST)
 
         return context
     
+    def delete_item_in_quote(self, quoteitems_pk):
+        if quoteitems_pk:
+            marketing_models.QuoteItem.objects.get(pk=quoteitems_pk).delete()
+
     def post(self, request, *args, **kwargs):
         context = self.get_context_data()
         forms_set = context['forms_set']
 
         if forms_set.is_valid():
             for form in forms_set:
-                if form.has_changed():
+                if form in forms_set.deleted_forms:
+                    self.delete_item_in_quote(form.instance.pk)
+                elif form.has_changed():
                     if self.item_exists_in_quote(form.instance.pk):
                         my_statics.save_calculation_related_with_quoteitems_model_fields(form)
                     else:

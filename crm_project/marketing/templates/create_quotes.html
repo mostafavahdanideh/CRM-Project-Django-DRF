@@ -63,7 +63,9 @@
                                 <td>
                                     {% render_field quote_item_form.discount|add_class:'form-control'|attr:'min:0'|attr:'max:100' %}
                                 </td>
-                                <td></td>
+                                <td>
+                                    <input type="checkbox" name="{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE" id="id_{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE">
+                                </td>
                             </tr>
                         {% endfor %}
                     </tbody>
