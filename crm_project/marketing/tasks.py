@@ -1,51 +1,37 @@
 from django.contrib.auth import get_user_model
 from django.core.mail import send_mail
 from celery import shared_task
-from django.shortcuts import get_object_or_404
-from django.conf import settings
-from marketing import models as marketing_models
-from django.template import loader
+from marketing import my_statics
+import smtplib
 
 
 @shared_task
-def send_email_task(quote_pk, user_pk):
+def send_email_task(
+    user_pk, from_email, email_to, subject, 
+    normal_message_content, html_message_content):
 
-    quote_obj = get_object_or_404(klass=marketing_models.Quote, pk=quote_pk)
-    user_obj = get_object_or_404(klass=get_user_model(), pk=user_pk)
-    email_from = settings.EMAIL_HOST_USER
-    email_to = quote_obj.owner.owner_email
-    subject = 'پیش فاکتور'
-    normal_message_content = "پیش فاکتور شما ثبت شد"
-    
-    html_message_content = loader.render_to_string(
-            template_name="quote_email_template.html",
-            context={
-                'quote_pk': quote_pk,
-                'message': "پیش فاکتور شما ثبت شد", 
-            })
-
+    user_obj = get_user_model().objects.get(pk=user_pk)
     try:
-
         send_mail(
             subject=subject,
             message=normal_message_content,
             html_message=html_message_content,
-            from_email=email_from,
+            from_email=from_email,
             recipient_list=[
                 email_to,
             ],
             fail_silently=False)
 
-        was_successfull=True
+        my_statics.save_email_status_delivery(
+            receiver_email=email_to, 
+            sender=user_obj, 
+            was_successfull=True)
 
-    except Exception as error:
-        print(error)
-        was_successfull=False
+        return True
+    except smtplib.SMTPException as exc:
+        my_statics.save_email_status_delivery(
+            receiver_email=email_to, 
+            sender=user_obj, 
+            was_successfull=False)
 
-    marketing_models.QuoteEmailHistory.objects.create(
-        receiver_email_address=email_to,
-        was_successfull=was_successfull,
-        user_sender=user_obj
-    ).save()
-
-    return 'Done'
+        return False

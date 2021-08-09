@@ -1,8 +1,12 @@
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 from django.urls import reverse, reverse_lazy
 from django.contrib.auth import mixins
 from django.views import generic
+from django.conf import settings
+from django.contrib.auth.decorators import login_required
+from rest_framework import status
 from . import my_statics, forms, tasks, models as marketing_models
 from organization import models as organization_models
 import weasyprint
@@ -235,24 +239,36 @@ class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
         return pdf_response
 
 
+@login_required
 def send_quote_email(request):
-    organization_pk = request.GET.get('pk', None)
+    quote_pk = request.GET.get('pk', None)
 
-    if organization_pk:
-        if organization_pk.isdigit():
-            user_pk = request.user.pk
-            tasks.send_email_task.delay(organization_pk, user_pk)
+    if quote_pk and quote_pk.isdigit():
+        email_to = get_object_or_404(klass=marketing_models.Quote, pk=quote_pk).owner.owner_email
+        subject = 'پیش فاکتور'
+        normal_message_content = "پیش فاکتور شما ثبت شد"
+    
+        html_message_content = render_to_string(
+            template_name="quote_email_template.html",
+            context={
+                'quote_pk': quote_pk,
+                'message': normal_message_content, 
+            })
 
-            return JsonResponse(
-                data={
-                    'message': "درخواست شما ارسال شد"
-                },
-                status=200
-            )
+        tasks.send_email_task.delay(
+            request.user.pk, settings.EMAIL_HOST_USER, email_to, subject, 
+            normal_message_content, html_message_content)
+
+        return JsonResponse(
+            data={
+                'message': "درخواست شما ارسال شد"
+            },
+            status=status.HTTP_200_OK
+        )
     
     return JsonResponse(
             data={
                 'message': "ارسال درخواست شما با مشکل مواجه شد لطفا دوباره ایمیل را ارسال کنید"
             },
-            status=422
+            status=status.HTTP_422_UNPROCESSABLE_ENTITY
         )

@@ -1,3 +1,4 @@
+from . import models
 
 
 def save_calculation_related_with_quoteitems_model_fields(form, quote=None):
@@ -19,3 +20,11 @@ def save_calculation_related_with_quoteitems_model_fields(form, quote=None):
         discount_amount)
 
     form.save()
+
+
+def save_email_status_delivery(receiver_email, sender, was_successfull):
+    models.QuoteEmailHistory.objects.create(
+        receiver_email_address=receiver_email,
+        was_successfull=was_successfull,
+        user_sender=sender
+    ).save()

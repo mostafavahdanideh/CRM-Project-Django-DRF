@@ -10,4 +10,4 @@ celery
 redis
 celery[redis]
 docker-compose
-django_celery_results
+djangorestframework
