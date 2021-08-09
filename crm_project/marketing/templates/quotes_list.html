@@ -18,7 +18,8 @@
                             {% trans "کارشناس ایجاد کننده" %}
                         {% endif %}
                     </th>
-                    <th>{% trans "خروجی پی دی اف" %}</th>
+                    <th>{% trans "عملیات" %}</th>
+                    <th>{% trans "عملیات" %}</th>
                     <th>{% trans "عملیات" %}</th>
                 </tr>
             </thead>
@@ -37,10 +38,16 @@
                             {% endif %}
                         </td>
                         <td class='fs-5 fw-bold'>
-                            <a type="btn" class="btn btn-success text-white" href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود" %}</a>
+                            <a type="btn" class="btn btn-success text-white" href="{% url 'marketing:download-quote-pdf' pk=quote.pk %}" style='text-decoration: none; color:red;'>{% trans "دانلود پی دی اف" %}</a>
                         </td>
                         <td class='fs-5 fw-bold'>
                             <button class='btn btn-success text-white' id='send-btn' data-pk={{quote.pk}}>{% trans "ارسال ایمیل به مخاطب" %}</button>
+                        </td>
+                        <td class='fs-5 fw-bold'>
+                            <form method='post' action="{% url 'marketing:delete_quote' quote.pk %}">
+                                {% csrf_token %}
+                                <input type="submit" class='btn btn-success text-white mt-2' value="{% trans "حذف فاکتور" %}">
+                            </form>
                         </td>
                     </tr>
                 {% endfor %}

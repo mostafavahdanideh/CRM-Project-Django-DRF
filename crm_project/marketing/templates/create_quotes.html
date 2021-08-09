@@ -64,7 +64,9 @@
                                     {% render_field quote_item_form.discount|add_class:'form-control'|attr:'min:0'|attr:'max:100' %}
                                 </td>
                                 <td>
-                                    <input type="checkbox" name="{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE" id="id_{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE">
+                                    {% if 'update-quote' in request.path %}
+                                        <input type="checkbox" name="{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE" id="id_{{ forms_set.prefix }}-{{forloop.counter|add:-1}}-DELETE">
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
@@ -84,6 +86,30 @@
 {% block scripts %}
     <script>
 
+        function deleteForm(event) {
+            var tr_idx = event.currentTarget.parentElement.parentElement.rowIndex;
+
+            event.currentTarget.parentElement.parentElement.remove();
+
+            var trs = $("tr");
+            var len_trs = trs.length - 1;
+
+            for (var i=len_trs; i>=tr_idx; i--) {
+                var current_tr = trs[i];
+
+                $(current_tr).find(':input').each(function() {
+                    if ($(this).attr('id') != 'delete-form') {
+                        var name = $(this).attr('name').replace('-' + i + '-','-' + (i-1) + '-');
+                        var id = 'id_' + name;
+                        $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                    }
+                });
+            }
+
+            var total = $('#id_' + 'form' + '-TOTAL_FORMS').val() - 1;
+            $('#id_' + 'form' + '-TOTAL_FORMS').val(total);
+        }
+
         function cloneMore(selector, type) {
             var newElements = $(selector);
             var lastTr = newElements[newElements.length - 1]
@@ -91,13 +117,18 @@
             var total = $('#id_' + type + '-TOTAL_FORMS').val();
 
             clonedLastTr.find(':input').each(function() {
-                var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
-                var id = 'id_' + name;
-                $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                if ($(this).attr('id') != 'delete-form') {
+                    var name = $(this).attr('name').replace('-' + (total-1) + '-','-' + total + '-');
+                    var id = 'id_' + name;
+                    $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+                }
             });
             
-            total++;
+            var tds = clonedLastTr.find('td');
+            var lastTd = tds[tds.length - 1];
+            lastTd.innerHTML = "<input id='delete-form' type='button' class='btn btn-primary' onclick='deleteForm(event)' value='-'></input>";
 
+            total++;
             $('#id_' + type + '-TOTAL_FORMS').val(total);
             $(lastTr).after(clonedLastTr);
         }

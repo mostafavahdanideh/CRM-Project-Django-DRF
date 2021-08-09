@@ -7,6 +7,7 @@ app_name = 'marketing'
 
 urlpatterns = [
     path('create-quote/', views.CreateQuotes.as_view(), name='create_quote'),
+    path('delete-quote/<int:pk>/', views.DeleteQuote.as_view(), name='delete_quote'),
     path('list-quote/', views.ListQuotes.as_view(),name='list_quotes'),
     path('detail-quote/<int:pk>/', views.DetailQuotes.as_view(),name='detail_quote'),
     path('download-quote/<int:pk>/', views.DownloadDetailQuote.as_view(), name='download-quote-pdf'),

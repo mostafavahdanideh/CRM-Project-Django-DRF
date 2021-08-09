@@ -1,6 +1,6 @@
 from django.http.response import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse, reverse_lazy
 from django.contrib.auth import mixins
 from django.views import generic
 from . import my_statics, forms, tasks, models as marketing_models
@@ -8,7 +8,7 @@ from organization import models as organization_models
 import weasyprint
 
 
-class ListOrganizationFollowUpHistory(generic.ListView):
+class ListOrganizationFollowUpHistory(mixins.LoginRequiredMixin, generic.ListView):
     template_name = 'follow_up_history.html'
     model = marketing_models.QuoteFollowUp
     paginate_by = 3
@@ -32,7 +32,7 @@ class ListOrganizationFollowUpHistory(generic.ListView):
         return context
 
 
-class CreateOrganizationFollowUp(generic.CreateView):
+class CreateOrganizationFollowUp(mixins.LoginRequiredMixin, generic.CreateView):
     template_name = 'create_follow_up.html'
     model = marketing_models.QuoteFollowUp
     form_class = forms.CreateFollowUp
@@ -104,21 +104,26 @@ class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
         forms_set = context['forms_set']
 
         if forms_set.has_changed() and forms_set.is_valid():
-            for form in forms_set:
-                organization_pk = self.get_organization_pk()
+            organization_pk = self.get_organization_pk()
+            
+            if organization_pk and organization_pk.isdigit():
+                quote = self.create_quote()
 
-                if organization_pk and organization_pk.isdigit():
-                    my_statics.save_calculation_related_with_quoteitems_model_fields(
-                        form, 
-                        self.create_quote())
-                else:
-                    forms_set.errors.append({'organization': "organization field is required"})
-                    return render(request, template_name='create_quotes.html', context=context)
+                for form in forms_set:
+                    my_statics.save_calculation_related_with_quoteitems_model_fields(form, quote)
+            else:
+                forms_set.errors.append({'organization': "organization field is required"})
+                return render(request, template_name='create_quotes.html', context=context)
         else:
             forms_set.errors.insert(0, {'form': "form is empty"})
             return render(request, template_name='create_quotes.html', context=context)
 
         return redirect("marketing:list_quotes")
+
+
+class DeleteQuote(mixins.LoginRequiredMixin, generic.DeleteView):
+    success_url = reverse_lazy("marketing:list_quotes")
+    model = marketing_models.Quote
 
 
 class EditQuotes(mixins.LoginRequiredMixin, generic.UpdateView):

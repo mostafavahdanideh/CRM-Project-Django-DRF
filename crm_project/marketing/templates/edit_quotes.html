@@ -1,5 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
+
 
 {% block content %}
     {% include 'create_quotes.html' %}
+    <script src={% static 'bootstrap/bootstrap.bundle.min.js' %}></script>
 {% endblock content %}
+
