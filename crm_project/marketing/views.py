@@ -239,6 +239,22 @@ class DownloadDetailQuote(mixins.LoginRequiredMixin, generic.DetailView):
         return pdf_response
 
 
+class ListQuoteEmailsHistory(mixins.LoginRequiredMixin, generic.ListView):
+    template_name = 'quotes_email_history.html'
+    model = marketing_models.QuoteEmailHistory
+    paginate_by = 7
+    ordering = [
+        "-created_time"
+    ]
+
+    def get_queryset(self):
+        qs = super().get_queryset()
+
+        if not self.request.user.is_superuser:
+            qs = qs.filter(user_sender=self.request.user)
+        return qs
+
+
 @login_required
 def send_quote_email(request):
     quote_pk = request.GET.get('pk', None)

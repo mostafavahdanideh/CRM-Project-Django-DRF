@@ -29,6 +29,8 @@ def send_email_task(
 
         return True
     except smtplib.SMTPException as exc:
+        print(exc)
+        
         my_statics.save_email_status_delivery(
             receiver_email=email_to, 
             sender=user_obj, 

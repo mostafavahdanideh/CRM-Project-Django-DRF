@@ -32,6 +32,10 @@
                                     <a class="dropdown-item text-dark" href="{% url 'organization:list' %}">{% trans "سازمان ها" %}</a>
                                 </li>
 
+                                <li>
+                                    <a class="dropdown-item text-dark" href="{% url 'marketing:emails_history' %}">{% trans "ایمیل پیش فاکتور ها" %}</a>
+                                </li>
+
                                 {% if request.user.is_superuser %}
                                     <li>
                                         <a class="dropdown-item text-dark" href="{% url 'organization:list-organization-product' %}">{% trans "محصولات تولیدی" %}</a>
