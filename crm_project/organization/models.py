@@ -12,8 +12,7 @@ owner_phone_number_regex = RegexValidator(
 
 organization_phone_number_regext = RegexValidator(
     regex="^(\+98|0)?\d{1,2}\d{1,8}$",
-    message="organization's phone number is invalid"
-)
+    message="organization's phone number is invalid")
 
 
 class OrganizationProduct(models.Model):
@@ -35,6 +34,7 @@ class Province(models.Model):
 
     def __str__(self):
         return self.name
+    
 
 
 class Organization(models.Model):
