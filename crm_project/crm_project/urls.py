@@ -22,6 +22,7 @@ from django.urls import path
 from django.urls.conf import include
 from organization import views as organization_views
 from users import views as users_view
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 
 urlpatterns = [
@@ -33,7 +34,8 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path('api/auth/', include('rest_auth.urls')),
+    path('api/token/get/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/organizations/', organization_views.OrganizationsListAPIView.as_view(), name='organizations'),
     path('api/users/<int:pk>/', users_view.UserDetailAPIView.as_view(), name='user-detail'),
 ]

@@ -6,7 +6,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from . import forms, models, serializers
 from inventory import models as inventory_models
-from rest_framework import generics
+from rest_framework import generics, permissions
 
 
 
@@ -144,6 +144,7 @@ class UpdateOrganization(LoginRequiredMixin, generic.UpdateView):
 class OrganizationsListAPIView(generics.ListAPIView):
     serializer_class = serializers.OrganizationSerializer
     queryset = models.Organization.objects.all()
+    permission_classes = [permissions.IsAuthenticated]
 
     def filter_queryset(self, queryset):
         qs = super().filter_queryset(queryset)

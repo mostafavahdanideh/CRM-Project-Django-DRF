@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import redirect
 from django.contrib.auth import get_user_model, views
-from rest_framework import generics
+from rest_framework import generics, permissions
 from . import serializers
 
 
@@ -25,4 +25,5 @@ class LogoutUsers(views.LogoutView):
 class UserDetailAPIView(generics.RetrieveAPIView):
     queryset = get_user_model().objects.all()
     serializer_class = serializers.UserSerializers
+    permission_classes = [permissions.IsAuthenticated]
     
