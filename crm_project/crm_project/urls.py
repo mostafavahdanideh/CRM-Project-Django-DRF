@@ -20,6 +20,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
+from organization import views as organization_views
+from users import views as users_view
 
 
 urlpatterns = [
@@ -30,6 +32,11 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 ]
 
+urlpatterns += [
+    path('api/auth/', include('rest_auth.urls')),
+    path('api/organizations/', organization_views.OrganizationsListAPIView.as_view(), name='organizations'),
+    path('api/users/<int:pk>/', users_view.UserDetailAPIView.as_view(), name='user-detail'),
+]
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

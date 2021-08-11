@@ -11,3 +11,5 @@ redis
 celery[redis]
 docker-compose
 djangorestframework
+django-rest-auth
+djangorestframework-jwt

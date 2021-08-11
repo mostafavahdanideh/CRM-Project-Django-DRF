@@ -4,8 +4,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
-from . import forms, models
+from . import forms, models, serializers
 from inventory import models as inventory_models
+from rest_framework import generics
+
+
+
+# Django Normal Views -------------------------------------------------------------------------------------------
 
 
 class ListOrganizationProduct(LoginRequiredMixin, generic.ListView):
@@ -131,3 +136,34 @@ class UpdateOrganization(LoginRequiredMixin, generic.UpdateView):
                 'messages': form.errors,
             }, status=400
         )
+
+
+# RestAPI Views -------------------------------------------------------------------------------------------
+
+
+class OrganizationsListAPIView(generics.ListAPIView):
+    serializer_class = serializers.OrganizationSerializer
+    queryset = models.Organization.objects.all()
+
+    def filter_queryset(self, queryset):
+        qs = super().filter_queryset(queryset)
+
+        if not self.request.user.is_superuser:
+            qs = qs.filter(expert_creator=self.request.user)
+        
+        return qs
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

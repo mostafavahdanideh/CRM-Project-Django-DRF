@@ -1,6 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.contrib.auth import views
+from django.contrib.auth import get_user_model, views
+from rest_framework import generics
+from . import serializers
 
 
 class LoginUsers(views.LoginView):
@@ -18,3 +20,9 @@ class LoginUsers(views.LoginView):
 
 class LogoutUsers(views.LogoutView):
     pass
+
+
+class UserDetailAPIView(generics.RetrieveAPIView):
+    queryset = get_user_model().objects.all()
+    serializer_class = serializers.UserSerializers
+    
