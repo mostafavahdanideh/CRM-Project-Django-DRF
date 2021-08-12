@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load i18n %}
+{% load humanize %}
+
+
+{% block content %}
+    {% include 'navbar.html' %}
+
+    <div style="margin-left: 100px;" class="card mt-lg-5" style="width: 75%;" dir='rtl'>
+        <div class="card-body">
+            <h5 class="card-title">{{object.organization}}</h5>
+            <h6 class="card-subtitle mb-2 text-muted">ایجاد شده توسط {{object.expert_creator}} در تاریخ {{object.created_time|date:"Y-m-d , H:i:s"}}</h6>
+            <p class="card-text">{{object.content}}</p>
+            <a href="{% url 'marketing:follow_up_history_list' object.organization.pk %}" class="btn btn-dark text-white mb-3" style='text-decoration: none;'>{% trans "بازگشت" %}</a>
+            <form method='post' action="{% url 'marketing:delete_follow_up' object.pk %}">
+                {% csrf_token %}
+                <button class='btn btn-dark text-white'>{% trans "حذف" %}</button>
+            </form>
+        </div>
+    </div>
+{% endblock content %}

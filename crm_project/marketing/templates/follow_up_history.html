@@ -9,7 +9,7 @@
     <div class='row ms-3'>
         <div class='row'>
             <div class='text-dark mt-lg-5 fw-bold fs-5'>
-                <h2>{{organization.organization_name}} {% trans "تاریخچه پیگیری شرکت" %}</h2>
+                <h2>{% trans "تاریخچه پیگیری شرکت" %} {{organization.organization_name}}</h2>
             </div>
         </div>
 
@@ -21,6 +21,8 @@
                         <th>{% trans "کاربر ثبت کننده" %}</th>
                         <th>{% trans "تاریخ ثبت" %}</th>
                         <th>{% trans "متن پیگیری" %}</th>
+                        <th>{% trans "عملیات" %}</th>
+                        <th>{% trans "عملیات" %}</th>
                     </tr>
                 </thead>
 
@@ -30,7 +32,16 @@
                             <td>{{forloop.counter}}</td>
                             <td>{{follow_up.expert_creator}}</td>
                             <td>{{follow_up.created_time|date:"Y-m-d , H:i:s"}}</td>
-                            <td>{{follow_up.content}}</td>
+                            <td>{{follow_up.content|truncatechars:"50"}}</td>
+                            <td>
+                                <form method='post' action="{% url 'marketing:delete_follow_up' follow_up.pk %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class='btn btn-info text-white'>{% trans "حذف" %}</button>
+                                </form>
+                            </td>
+                            <td>
+                                <a type="button" href="{% url 'marketing:detail_follow_up' follow_up.pk %}" class='btn btn-info text-white' style='text-decoration: none;'>{% trans "جزئیات" %}</a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </tbody>

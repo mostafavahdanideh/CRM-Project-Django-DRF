@@ -41,6 +41,11 @@ class CreateOrganizationFollowUp(mixins.LoginRequiredMixin, generic.CreateView):
     model = marketing_models.QuoteFollowUp
     form_class = forms.CreateFollowUp
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['pk'] = self.kwargs.get('pk', None)
+        return context
+
     def form_valid(self, form):
         form.instance.expert_creator = self.request.user
 
@@ -52,7 +57,7 @@ class CreateOrganizationFollowUp(mixins.LoginRequiredMixin, generic.CreateView):
 
         return JsonResponse(
             data={
-                'message': "your data successfully saved"
+                'message': "با موفقیت ذخیره شد"
             }, status=200
         )
     
@@ -61,6 +66,18 @@ class CreateOrganizationFollowUp(mixins.LoginRequiredMixin, generic.CreateView):
             data={
                 "errors": form.errors
             }, status=400)
+
+
+class DeleteOrganizationFollowUp(mixins.LoginRequiredMixin, generic.DeleteView):
+    model = marketing_models.QuoteFollowUp
+
+    def get_success_url(self):
+        return reverse("marketing:follow_up_history_list", kwargs={'pk': self.object.organization_id})
+
+
+class DetailOrganizationFollowUp(mixins.LoginRequiredMixin, generic.DetailView):
+    model = marketing_models.QuoteFollowUp
+    template_name = 'follow_up_detail.html'
 
 
 class CreateQuotes(mixins.LoginRequiredMixin, generic.CreateView):
