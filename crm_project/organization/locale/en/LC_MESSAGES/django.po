@@ -1,0 +1,178 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-13 20:56+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: organization/models.py:21
+msgid "نام محصول"
+msgstr "Product name"
+
+#: organization/models.py:30
+msgid "استان"
+msgstr "Province"
+
+#: organization/models.py:44
+#: organization/templates/organization_details.html:31
+#: organization/templates/register.html:36
+msgid "نام استان"
+msgstr "Province name"
+
+#: organization/models.py:50 organization/templates/organization_list.html:13
+#: organization/templates/register.html:29
+msgid "نام سازمان"
+msgstr "Organization name"
+
+#: organization/models.py:55 organization/templates/register.html:55
+msgid "شماره تلفن سازمان"
+msgstr "Organization phone number"
+
+#: organization/models.py:61
+#: organization/templates/organization_details.html:59
+#: organization/templates/register.html:95
+msgid "تعداد کارگران"
+msgstr "Workers size"
+
+#: organization/models.py:66
+#: organization/templates/organization_details.html:129
+msgid "محصولات تولیدی"
+msgstr "Manufactured products"
+
+#: organization/models.py:70
+#: organization/templates/organization_details.html:82
+#: organization/templates/register.html:48
+msgid "نام مخاطب"
+msgstr "Customer first name"
+
+#: organization/models.py:76
+#: organization/templates/organization_details.html:89
+#: organization/templates/register.html:71
+msgid "نام خانوادگی مخاطب"
+msgstr "Customer last name"
+
+#: organization/models.py:82
+msgid "پسوند مخاطب"
+msgstr "Customer second last name"
+
+#: organization/models.py:89
+#: organization/templates/organization_details.html:73
+#: organization/templates/register.html:80
+msgid "شماره تلفن مخاطب"
+msgstr "Customer phone number"
+
+#: organization/models.py:96
+#: organization/templates/organization_details.html:105
+#: organization/templates/register.html:87
+msgid "ایمیل مخاطب"
+msgstr "Customer email"
+
+#: organization/models.py:101
+#: organization/templates/organization_details.html:50
+msgid "تاریخ ایجاد شده"
+msgstr "Created time"
+
+#: organization/models.py:107
+msgid "کارشناس ایجاد کننده"
+msgstr "Expert creator"
+
+#: organization/templates/add_organization_products.html:14
+msgid "نام محصول تولیدی"
+msgstr "Manufactured product"
+
+#: organization/templates/add_organization_products.html:17
+msgid "ثبت محصول تولیدی"
+msgstr "Add manufactured product"
+
+#: organization/templates/list_organization_product.html:13
+msgid "نام محصولات تولیدی"
+msgstr "manufactured products name"
+
+#: organization/templates/list_organization_product.html:14
+msgid "نام محصولات پیشنهادی"
+msgstr "suggestion products name"
+
+#: organization/templates/organization_details.html:11
+msgid "مشخصات سازمان"
+msgstr "Organiation detail"
+
+#: organization/templates/organization_details.html:11
+msgid "شرکت"
+msgstr "Company"
+
+#: organization/templates/organization_details.html:16
+msgid "بازگشت"
+msgstr "Back"
+
+#: organization/templates/organization_details.html:17
+msgid "صدور پیش فاکتور"
+msgstr "Create quote"
+
+#: organization/templates/organization_details.html:18
+msgid "ویرایش اطلاعات سازمان و مخاطب"
+msgstr "Edit Organization detail"
+
+#: organization/templates/organization_details.html:19
+msgid "تاریخچه پیگیری سفارشات سازمان"
+msgstr "Organization follow up history"
+
+#: organization/templates/organization_details.html:43
+msgid "تلفن سازمان"
+msgstr "Organization phone number"
+
+#: organization/templates/organization_details.html:66
+msgid "ایجاد شده توسط"
+msgstr "Created by"
+
+#: organization/templates/organization_details.html:96
+msgid "نام پسوندی مخاطب"
+msgstr "Customer second last name"
+
+#: organization/templates/organization_details.html:114
+msgid "ذخیره تغییرات"
+msgstr "Update"
+
+#: organization/templates/organization_details.html:140
+msgid "محصولات پیشنهادی"
+msgstr "Suggestion products"
+
+#: organization/templates/organization_list.html:14
+msgid "مخاطب"
+msgstr "Customer"
+
+#: organization/templates/organization_list.html:15
+msgid "ثبت کننده"
+msgstr "Creator"
+
+#: organization/templates/organization_list.html:16
+msgid "عملیات"
+msgstr "Operations"
+
+#: organization/templates/organization_list.html:29
+msgid "ثبت پیگیری"
+msgstr "Add follow up"
+
+#: organization/templates/register.html:21
+msgid "سازمان خود را تعریف کنید"
+msgstr "Create your organization"
+
+#: organization/templates/register.html:64
+msgid "پسوند مخاطب (اختیاری)"
+msgstr "Customer second last name (Optional)"
+
+#: organization/templates/register.html:117
+msgid "ثبت"
+msgstr "Add"

@@ -1,0 +1,130 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-13 20:56+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: inventory/fields.py:20
+msgid "فایل توسط این فیلد پشتیبانی نمی شود"
+msgstr "The field can't support this file"
+
+#: inventory/models.py:9
+msgid "نام محصول"
+msgstr "Product name"
+
+#: inventory/models.py:14
+msgid "آیا مشمول مالیات است؟"
+msgstr "Has taxation?"
+
+#: inventory/models.py:18 inventory/templates/list_company_products.html:18
+msgid "عکس کاتالوگ"
+msgstr "Catalog image"
+
+#: inventory/models.py:23 inventory/templates/list_company_products.html:17
+msgid "پی دی اف کاتالوگ"
+msgstr "Catalog pdf"
+
+#: inventory/models.py:29
+msgid "قیمت"
+msgstr "Price"
+
+#: inventory/models.py:33 inventory/templates/add_company_products.html:36
+#: inventory/templates/detail_company_products.html:48
+#: inventory/templates/update_company_product.html:32
+msgid "ویژگی های فنی"
+msgstr "Technical features"
+
+#: inventory/models.py:38
+msgid "قابل استفاده برای تولید محصولات تولیدی"
+msgstr "Useful for manufactured products"
+
+#: inventory/templates/add_company_products.html:15
+#: inventory/templates/detail_company_products.html:22
+#: inventory/templates/list_company_products.html:14
+#: inventory/templates/update_company_product.html:15
+msgid "نام محصول سازمان"
+msgstr "Organization product name"
+
+#: inventory/templates/add_company_products.html:20
+#: inventory/templates/detail_company_products.html:27
+#: inventory/templates/list_company_products.html:15
+#: inventory/templates/update_company_product.html:20
+msgid "قیمت (تومان)"
+msgstr "Price (T)"
+
+#: inventory/templates/add_company_products.html:27
+#: inventory/templates/detail_company_products.html:32
+#: inventory/templates/update_company_product.html:26
+msgid "مشمول مالیات است؟"
+msgstr "Has taxation?"
+
+#: inventory/templates/add_company_products.html:54
+#: inventory/templates/update_company_product.html:44
+msgid "لطفا فایل پی دی اف کاتالوگ را آپلود کنید. (اختیاری)"
+msgstr "Please upload catalog pdf file (Optional)"
+
+#: inventory/templates/add_company_products.html:62
+#: inventory/templates/update_company_product.html:52
+msgid "لطفا عکس کاتالوگ را آپلود کنید. (اختیاری)"
+msgstr "Please upload catalog image file (Optional)"
+
+#: inventory/templates/add_company_products.html:71
+msgid "ثبت محصول سازمان"
+msgstr "Add"
+
+#: inventory/templates/detail_company_products.html:35
+#: inventory/templates/list_company_products.html:32
+msgid "بله"
+msgstr "Yes"
+
+#: inventory/templates/detail_company_products.html:39
+#: inventory/templates/list_company_products.html:34
+msgid "خیر"
+msgstr "No"
+
+#: inventory/templates/detail_company_products.html:53
+msgid "محصولات پیشنهادی"
+msgstr "Suggestion products"
+
+#: inventory/templates/detail_company_products.html:65
+msgid "دانلود پی دی اف کاتالوگ"
+msgstr ""
+
+#: inventory/templates/detail_company_products.html:71
+msgid "دانلود عکس کاتالوگ"
+msgstr "Download pdf image"
+
+#: inventory/templates/detail_company_products.html:75
+msgid "ویرایش اطلاعات"
+msgstr "Edit"
+
+#: inventory/templates/list_company_products.html:16
+msgid "مشمول مالیات"
+msgstr "Taxation"
+
+#: inventory/templates/list_company_products.html:40
+#: inventory/templates/list_company_products.html:49
+msgid "دانلود"
+msgstr "Downlaod"
+
+#: inventory/templates/update_company_product.html:37
+msgid "محصولات تولیدی"
+msgstr "Manufactured products"
+
+#: inventory/templates/update_company_product.html:60
+msgid "ثبت تغییرات"
+msgstr "Update"

@@ -17,7 +17,28 @@
                         <a class="navbar-brand text-white" href="{% url "admin:index" %}">{% trans "پنل مدیریت" %}</a>
                     {% endif %}
 
-                    <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                {% else %}
+                    <a class="navbar-brand text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
+                {% endif %}
+
+                <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                    <div class="dropdown dropstart">
+                        <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="list_drop_down" data-bs-toggle="dropdown" aria-expanded="false">
+                            {% trans "تغییر زبان" %}
+                        </a>
+
+                        <ul class="dropdown-menu" aria-labelledby="list_drop_down">
+                            <li>
+                                <a class="dropdown-item text-dark" href="#">{% trans "انگلیسی" %}</a>
+                            </li>
+
+                            <li>
+                                <a class="dropdown-item text-dark" href="#">{% trans "فارسی" %}</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    {% if request.user.is_authenticated %}
                         <div class="dropdown dropstart">
                             <a class="btn btn-dark dropdown-toggle" href="#" role="button" id="list_drop_down" data-bs-toggle="dropdown" aria-expanded="false">
                                 {% trans "لیست" %}
@@ -73,10 +94,8 @@
                                 {% endif %}
                             </ul>
                         </div>
-                    </div>
-                {% else %}
-                    <a class="navbar-brand text-white" href="{% url 'expert:login' %}">{% trans "ورود" %}</a>
-                {% endif %}
+                    {% endif %}
+                </div>
             </nav>
         </div>
     </div>

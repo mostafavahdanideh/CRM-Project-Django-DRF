@@ -1,0 +1,254 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2021-08-13 20:56+0430\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: marketing/models.py:24 marketing/models.py:117
+msgid "سازمان"
+msgstr "Organization"
+
+#: marketing/models.py:28 marketing/models.py:123
+#: marketing/templates/quotes_list.html:18
+msgid "کارشناس ایجاد کننده"
+msgstr "Expert creator"
+
+#: marketing/models.py:35 marketing/models.py:129
+msgid "تاریخ ایجاد پیش فاکتور"
+msgstr "Quote created time"
+
+#: marketing/models.py:64
+msgid "قیمت خام محصول"
+msgstr "Product price"
+
+#: marketing/models.py:70 marketing/templates/create_quotes.html:46
+msgid "درصد تخفیف"
+msgstr "Discount percent"
+
+#: marketing/models.py:79 marketing/templates/create_quotes.html:45
+#: marketing/templates/detail_quote.html:24
+#: marketing/templates/generate_quote_pdf.html:15
+msgid "تعداد خرید"
+msgstr "Quantity"
+
+#: marketing/models.py:84
+msgid "قیمت خام"
+msgstr "Price"
+
+#: marketing/models.py:89
+msgid "قیمت با مالیات"
+msgstr "Cost with taxation"
+
+#: marketing/models.py:94
+msgid "قیمت نهایی با تخفیف"
+msgstr "Total cost with discount"
+
+#: marketing/models.py:133 marketing/templates/follow_up_history.html:23
+msgid "متن پیگیری"
+msgstr "Follow up text"
+
+#: marketing/models.py:145
+msgid "ایمیل گیرنده"
+msgstr "Reciever email"
+
+#: marketing/models.py:150
+msgid "ایمیل ارسال شد؟"
+msgstr "Email sent?"
+
+#: marketing/models.py:155
+msgid "تاریخ ارسال شده"
+msgstr "Sent time"
+
+#: marketing/models.py:161
+msgid "کاربر ارسال کننده"
+msgstr "Sender user"
+
+#: marketing/templates/create_follow_up.html:18
+msgid "متن پیگیری (گزارش کار) خود را برای سازمان مربوطه وارد کنید"
+msgstr "Enter your follow up text"
+
+#: marketing/templates/create_follow_up.html:22
+#: marketing/templates/create_quotes.html:78
+msgid "ذخیره"
+msgstr "Add"
+
+#: marketing/templates/create_follow_up.html:75
+msgid "لیست پیگیری فروش"
+msgstr "Follow up list"
+
+#: marketing/templates/create_quotes.html:12
+msgid "ثبت پیش فاکتور"
+msgstr "Add quote"
+
+#: marketing/templates/create_quotes.html:16
+msgid "تغییر پیش فاکتور"
+msgstr "Update quote"
+
+#: marketing/templates/create_quotes.html:26
+msgid "انتخاب سازمان"
+msgstr "Choose organization"
+
+#: marketing/templates/create_quotes.html:37
+msgid "آیتم اضافه کن"
+msgstr "Add items"
+
+#: marketing/templates/create_quotes.html:44
+msgid "انتخاب محصول"
+msgstr "Choose product"
+
+#: marketing/templates/create_quotes.html:47
+msgid "حذف آیتم"
+msgstr "Delete item"
+
+#: marketing/templates/detail_quote.html:11
+msgid "ویرایش"
+msgstr "Edit"
+
+#: marketing/templates/detail_quote.html:23
+#: marketing/templates/generate_quote_pdf.html:14
+msgid "نام محصول"
+msgstr "Product name"
+
+#: marketing/templates/detail_quote.html:25
+msgid "قیمت خام محصول به تومان"
+msgstr "Product price (T)"
+
+#: marketing/templates/detail_quote.html:26
+msgid "قیمت خام به تومان (قبل از مالیات)"
+msgstr "Price (T) (before taxation)"
+
+#: marketing/templates/detail_quote.html:27
+msgid "قیمت اصلی به تومان (بعد از مالیات)"
+msgstr "Cost (T) (after taxation)"
+
+#: marketing/templates/detail_quote.html:28
+msgid "قیمت نهایی بعد از اعمال تخفیف به تومان"
+msgstr "Total cost (T) (after discount)"
+
+#: marketing/templates/detail_quote.html:45
+msgid " :جمع کل هزینه ها پیش از مالیات و اعمال تخفیف"
+msgstr "Total sum amount (before taxation and discount): "
+
+#: marketing/templates/detail_quote.html:48
+msgid " :جمع کل هزینه ها بعد از مالیات و اعمال تخفیف"
+msgstr "Total sum amount (after taxation and discount): "
+
+#: marketing/templates/detail_quote.html:51
+msgid " :ثبت شده در تاریخ"
+msgstr "Created time at: "
+
+#: marketing/templates/follow_up_detail.html:14
+msgid "بازگشت"
+msgstr "Back"
+
+#: marketing/templates/follow_up_detail.html:17
+#: marketing/templates/follow_up_history.html:39
+msgid "حذف"
+msgstr "Delete"
+
+#: marketing/templates/follow_up_history.html:12
+msgid "تاریخچه پیگیری شرکت"
+msgstr "Organization Follow up history"
+
+#: marketing/templates/follow_up_history.html:21
+msgid "کاربر ثبت کننده"
+msgstr "Creator"
+
+#: marketing/templates/follow_up_history.html:22
+#: marketing/templates/quotes_list.html:15
+msgid "تاریخ ثبت"
+msgstr "Created time"
+
+#: marketing/templates/follow_up_history.html:24
+#: marketing/templates/follow_up_history.html:25
+#: marketing/templates/quotes_list.html:21
+#: marketing/templates/quotes_list.html:22
+#: marketing/templates/quotes_list.html:23
+msgid "عملیات"
+msgstr "Operation"
+
+#: marketing/templates/follow_up_history.html:43
+msgid "جزئیات"
+msgstr "Detail"
+
+#: marketing/templates/generate_quote_pdf.html:16
+msgid "قیمت خام (تومان)"
+msgstr "Price (T)"
+
+#: marketing/templates/generate_quote_pdf.html:17
+msgid "قیمت اصلی (تومان)"
+msgstr "Cost (T)"
+
+#: marketing/templates/generate_quote_pdf.html:18
+msgid "قیمت نهایی (تومان)"
+msgstr "Total cost (T)"
+
+#: marketing/templates/generate_quote_pdf.html:34
+msgid "جمع خام هزینه ها"
+msgstr "Cost Sum (T)"
+
+#: marketing/templates/generate_quote_pdf.html:37
+msgid "جمع نهایی هزینه ها"
+msgstr "Total cost sum (T)"
+
+#: marketing/templates/generate_quote_pdf.html:40
+msgid "ثبت شده در تاریخ"
+msgstr "Created time"
+
+#: marketing/templates/quotes_email_history.html:14
+msgid "گیرنده"
+msgstr "Reciever"
+
+#: marketing/templates/quotes_email_history.html:15
+msgid "وضعیت ارسال"
+msgstr "Sent status"
+
+#: marketing/templates/quotes_email_history.html:16
+msgid "زمان ارسال"
+msgstr "Sent time"
+
+#: marketing/templates/quotes_email_history.html:18
+msgid "ارسال کننده"
+msgstr "Sender"
+
+#: marketing/templates/quotes_email_history.html:29
+msgid "ارسال شد"
+msgstr "sent"
+
+#: marketing/templates/quotes_email_history.html:31
+msgid "ارسال نشد"
+msgstr "not sent"
+
+#: marketing/templates/quotes_email_history.html:53
+msgid "جدید"
+msgstr "New"
+
+#: marketing/templates/quotes_list.html:14
+msgid "نام سازمان"
+msgstr "Organization name"
+
+#: marketing/templates/quotes_list.html:41
+msgid "دانلود پی دی اف"
+msgstr "Download pdf"
+
+#: marketing/templates/quotes_list.html:44
+msgid "ارسال ایمیل به مخاطب"
+msgstr "Send email"
+
+#: marketing/templates/quotes_list.html:49
+msgid "حذف فاکتور"
+msgstr "Delete quote"
