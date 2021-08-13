@@ -57,6 +57,14 @@ class QuoteItem(models.Model):
         on_delete=models.PROTECT
     )
 
+    # product price of item in quote has to be fixed because maybe later we need to change /
+    # product price in our company model and we don't want it to change in our item in quote /
+    # in otherwords out items in quote that are our quote has to be fixed
+    product_price = models.PositiveIntegerField(
+        verbose_name=_("قیمت خام محصول"),
+        default=0,
+    )
+
     discount = models.FloatField(
         default=0.0,
         verbose_name=_("درصد تخفیف"),
@@ -66,28 +74,31 @@ class QuoteItem(models.Model):
             ]
     )
 
-    quantity = models.PositiveIntegerField(
+    quantity = models.PositiveBigIntegerField(
         default=1,
         verbose_name=_("تعداد خرید")
     )
 
-    base_cost = models.PositiveIntegerField(
+    base_cost = models.PositiveBigIntegerField(
         default=0,
         verbose_name=_("قیمت خام")
     )
 
-    cost_with_taxation = models.PositiveIntegerField(
+    cost_with_taxation = models.PositiveBigIntegerField(
         default=0,
         verbose_name=_("قیمت با مالیات")
     )
 
-    final_cost_with_discount = models.PositiveIntegerField(
+    final_cost_with_discount = models.PositiveBigIntegerField(
         default=0,
         verbose_name=_("قیمت نهایی با تخفیف")
     )
 
+    def set_fixed_product_price(self):
+        self.product_price = self.product.price
+
     def calculating_base_cost(self):
-        return self.product.price * self.quantity
+        return self.product_price * self.quantity
     
     def calculating_cost_with_taxation(self, base_cost):
         return ((base_cost * 9) / 100) + base_cost

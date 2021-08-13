@@ -4,8 +4,13 @@ from . import models
 def save_calculation_related_with_quoteitems_model_fields(form, quote=None):
     quoteitems_obj = form.instance
 
+    # if the quote exist then we don't need to create new one (we use this condition when we want update quoteitems)
     if quote:
         quoteitems_obj.quote = quote
+
+    # product_price has to be 0 and then we can set the current product price for our quote
+    if not quoteitems_obj.product_price:
+        quoteitems_obj.set_fixed_product_price()
 
     quoteitems_obj.base_cost = quoteitems_obj.calculating_base_cost()
 

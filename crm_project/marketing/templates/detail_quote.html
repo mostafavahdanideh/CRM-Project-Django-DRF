@@ -22,6 +22,7 @@
                     <th>#</th>
                     <th>{% trans "نام محصول" %}</th>
                     <th>{% trans "تعداد خرید" %}</th>
+                    <th>{% trans "قیمت خام محصول به تومان" %}</th>
                     <th>{% trans "قیمت خام به تومان (قبل از مالیات)" %}</th>
                     <th>{% trans "قیمت اصلی به تومان (بعد از مالیات)" %}</th>
                     <th>{% trans "قیمت نهایی بعد از اعمال تخفیف به تومان" %}</th>
@@ -34,6 +35,7 @@
                         <td class='fs-5 fw-bold'>{{forloop.counter}}</td>
                         <td class='fs-5 fw-bold'>{{quoteitem.product}}</td>
                         <td class='fs-5 fw-bold'>{{quoteitem.quantity}}</td>
+                        <td class='fs-5 fw-bold'>{{quoteitem.product_price|intcomma}}</td>
                         <td class='fs-5 fw-bold'>{{quoteitem.base_cost|intcomma}}</td>
                         <td class='fs-5 fw-bold'>{{quoteitem.cost_with_taxation|intcomma}}</td>
                         <td class='fs-5 fw-bold'>{{quoteitem.final_cost_with_discount|intcomma}}</td>

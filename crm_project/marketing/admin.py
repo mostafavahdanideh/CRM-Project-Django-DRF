@@ -8,6 +8,7 @@ class QuoteItemInline(admin.TabularInline):
     fields = [
         'quote',
         'product',
+        'product_price',
         'discount',
         'quantity',
         'base_cost',
