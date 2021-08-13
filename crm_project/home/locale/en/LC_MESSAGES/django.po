@@ -17,19 +17,6 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-
-#: users/templates/login_form.html:13
-msgid "فرم ورود"
-msgstr "Login form"
-
-#: users/templates/login_form.html:20
-msgid "نام کاربری"
-msgstr "Username"
-
-#: users/templates/login_form.html:28
-msgid "رمزعبور"
-msgstr "Password"
-
-#: users/templates/login_form.html:32
-msgid "تایید"
-msgstr "login"
+#: home/templates/home.html:8
+msgid "به سایت ما خوش آمدید"
+msgstr "Welcome to our CRM site, Thanks for choosing us."

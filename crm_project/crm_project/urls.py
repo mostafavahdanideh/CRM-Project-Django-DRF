@@ -30,6 +30,7 @@ urlpatterns = [
     path('organization/', include('organization.urls', namespace='our-organization')),
     path('marketing/', include('marketing.urls', namespace='marketing')),
     path('inventory/', include('inventory.urls', namespace='inventory')),
+    path('home/', include('home.urls', namespace='my_home')),
     path('admin/', admin.site.urls),
 ]
 

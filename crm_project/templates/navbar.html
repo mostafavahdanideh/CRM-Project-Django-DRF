@@ -5,7 +5,7 @@
     <div class='row'>
         <div class='sticky-top mt-lg-5'>
             <nav class="navbar navbar-expand-lg navbar-light bg-dark">
-                <a class="navbar-brand text-white" href="#">{% trans "سی آر ام" %}</a>
+                <a class="navbar-brand text-white" href="{% url 'home:home' %}">{% trans "سی آر ام" %}</a>
 
                 {% if request.user.is_authenticated %}
 
@@ -29,11 +29,11 @@
 
                         <ul class="dropdown-menu" aria-labelledby="list_drop_down">
                             <li>
-                                <a class="dropdown-item text-dark" href="#">{% trans "انگلیسی" %}</a>
+                                <a class="dropdown-item text-dark" href="{% url 'home:change_language' %}?lang=en&next={{request.path}}">{% trans "انگلیسی" %}</a>
                             </li>
 
                             <li>
-                                <a class="dropdown-item text-dark" href="#">{% trans "فارسی" %}</a>
+                                <a class="dropdown-item text-dark" href="{% url 'home:change_language' %}?lang=fa&next={{request.path}}">{% trans "فارسی" %}</a>
                             </li>
                         </ul>
                     </div>
