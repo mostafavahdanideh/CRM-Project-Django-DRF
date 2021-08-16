@@ -1,0 +1,30 @@
+version: "3.3"
+
+volumes: 
+    CRMdata:
+
+services:
+    db:
+        image: postgres:13.3-alpine
+        ports: 
+            - 5432:5432
+        volumes: 
+            - CRMdata:/var/lib/postgresql/data
+        environment: 
+            POSTGRES_DB: 'DB_NAME'
+            POSTGRES_USER: 'DB_USER'
+            POSTGRES_PASSWORD: 'DB_PASSWORD'
+    broker:
+        hostname: crm_django_broker
+        image: "rabbitmq:alpine"
+        ports: 
+            - 5672:5672
+            - 15672:15672
+    
+    redis:
+        hostname: crm_django_redis
+        image: "redis:alpine"
+        ports: 
+            - "6380:6380"
+            - "6379:6379"
+            

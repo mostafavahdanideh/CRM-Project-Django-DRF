@@ -34,9 +34,7 @@ MANIFEST
 *logs/
 
 # config file and deployment
-*.yml
-*.yaml
-settings.py
+*.ini
 media/
 asset/
 
