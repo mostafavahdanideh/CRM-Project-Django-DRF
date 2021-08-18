@@ -1,1 +1,1 @@
-# CRM-Project-Django
+# Simple CRM-Project-Django
